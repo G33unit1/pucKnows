@@ -1,0 +1,79 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Pick</title>
+  <style>
+    html, body { height: 100%; margin: 0; }
+    body {
+      display: grid;
+      place-items: center;
+      font-family: system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, sans-serif;
+      background: #0b0b0b;
+      color: #f5f5f5;
+      text-align: center;
+    }
+    #answer {
+      font-size: clamp(40px, 10vw, 110px);
+      font-weight: 800;
+      letter-spacing: -0.02em;
+      opacity: 0;
+      transition: opacity 150ms ease;
+      padding: 0 16px;
+      user-select: none;
+    }
+    #choices {
+      margin-top: 14px;
+      font-size: clamp(14px, 3.5vw, 18px);
+      opacity: 0.55;
+      user-select: none;
+    }
+  </style>
+</head>
+<body>
+  <div id="answer">…</div>
+  <div id="choices"></div>
+
+  <script>
+    const LOCK_MS = 45 * 1000;
+    const THINK_MS = 300;
+
+    function getParam(name, fallback) {
+      const v = new URLSearchParams(location.search).get(name);
+      return (v && v.trim()) ? v.trim() : fallback;
+    }
+
+    const A = getParam("a", "Option A");
+    const B = getParam("b", "Option B");
+
+    // Unique lock per pair so Indian/Chinese doesn't lock Netflix/Game
+    const KEY = "pick_lock_v1_" + btoa(unescape(encodeURIComponent(A + "|" + B))).slice(0, 24);
+
+    function pick50() {
+      return Math.random() < 0.5 ? A : B;
+    }
+
+    function reveal(result) {
+      const ans = document.getElementById("answer");
+      const ch = document.getElementById("choices");
+      ans.textContent = result;
+      ch.textContent = `${A}  vs  ${B}`;
+      requestAnimationFrame(() => { ans.style.opacity = 1; });
+    }
+
+    const now = Date.now();
+    let saved = null;
+    try { saved = JSON.parse(localStorage.getItem(KEY) || "null"); } catch {}
+
+    if (saved && saved.until > now && saved.answer) {
+      reveal(saved.answer);
+    } else {
+      const answer = pick50();
+      const until = now + LOCK_MS;
+      localStorage.setItem(KEY, JSON.stringify({ answer, until, answerA: A, answerB: B }));
+      setTimeout(() => reveal(answer), THINK_MS);
+    }
+  </script>
+</body>
+</html>
