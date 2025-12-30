@@ -1,0 +1,61 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Should I?</title>
+  <style>
+    html, body { height: 100%; margin: 0; }
+    body{
+      display:grid; place-items:center;
+      font-family: system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, sans-serif;
+      background:#0b0b0b; color:#f5f5f5;
+      text-align:center;
+    }
+    #answer{
+      font-size: clamp(48px, 12vw, 120px);
+      font-weight:800;
+      letter-spacing:-0.02em;
+      opacity:0;
+      transition: opacity 150ms ease;
+      user-select:none;
+      padding: 0 16px;
+    }
+    .back{
+      position:fixed; top:14px; left:14px;
+      color:#f5f5f5; opacity:.6; text-decoration:none; font-weight:600;
+    }
+  </style>
+</head>
+<body>
+  <a class="back" href="./">←</a>
+  <div id="answer">…</div>
+
+  <script>
+    const LOCK_MS = 45 * 1000;
+    const THINK_MS = 300;
+    const KEY = "should_lock_v1";
+
+    function pick(){ return Math.random() < 0.5 ? "Do it" : "Don’t"; }
+
+    function reveal(text){
+      const el = document.getElementById("answer");
+      el.textContent = text;
+      requestAnimationFrame(() => { el.style.opacity = 1; });
+    }
+
+    const now = Date.now();
+    let saved = null;
+    try { saved = JSON.parse(localStorage.getItem(KEY) || "null"); } catch {}
+
+    if (saved && saved.until > now && saved.answer) {
+      reveal(saved.answer);
+    } else {
+      const answer = pick();
+      const until = now + LOCK_MS;
+      localStorage.setItem(KEY, JSON.stringify({ answer, until }));
+      setTimeout(() => reveal(answer), THINK_MS);
+    }
+  </script>
+</body>
+</html>
