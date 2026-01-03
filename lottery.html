@@ -33,7 +33,20 @@
       font-size:18px;
       font-weight:750;
       margin-top: 12px;
+      cursor:pointer;
     }
+    .btn.secondary{
+      background:#1c1c1c;
+      color:#f5f5f5;
+      border:1px solid #2a2a2a;
+      font-weight:700;
+    }
+    .btnrow{
+      display:flex;
+      gap:10px;
+      margin-top: 12px;
+    }
+    .btnrow .btn{ margin-top:0; }
     .out{
       margin-top: 14px;
       font-size: clamp(18px, 5vw, 26px);
@@ -41,8 +54,15 @@
       letter-spacing: .5px;
       min-height: 40px;
       word-spacing: 10px;
+      user-select: text;
     }
     .hint{ margin-top:14px; font-size:14px; opacity:.55; }
+    .toast{
+      margin-top: 10px;
+      font-size: 13px;
+      opacity: .75;
+      min-height: 18px;
+    }
     a.back{ display:inline-block; margin-top: 16px; color:#f5f5f5; opacity:.7; text-decoration:none; }
   </style>
 </head>
@@ -65,8 +85,13 @@
         </div>
       </div>
 
-      <button class="btn" id="go">Pick numbers</button>
+      <div class="btnrow">
+        <button class="btn" id="go">Pick</button>
+        <button class="btn secondary" id="copy" disabled>Copy</button>
+      </div>
+
       <div class="out" id="out">—</div>
+      <div class="toast" id="toast"></div>
       <div class="hint">Unique picks (no repeats). Tap again to repick.</div>
     </div>
 
@@ -93,7 +118,6 @@
         } while (x > maxUnbiased);
         return min + (x % range);
       }
-
       return min + Math.floor(Math.random() * range);
     }
 
@@ -101,11 +125,9 @@
       const n = max - min + 1;
       if (k > n) throw new Error("k too large");
 
-      // pool for small lottery ranges
       const pool = [];
       for (let i=0;i<n;i++) pool.push(min+i);
 
-      // partial Fisher-Yates
       for (let i=0;i<k;i++){
         const j = i + randInt(0, n - i - 1);
         [pool[i], pool[j]] = [pool[j], pool[i]];
@@ -114,6 +136,25 @@
     }
 
     const out = document.getElementById("out");
+    const toast = document.getElementById("toast");
+    const copyBtn = document.getElementById("copy");
+
+    function setToast(msg){
+      toast.textContent = msg;
+      if (msg) setTimeout(() => { toast.textContent = ""; }, 1400);
+    }
+
+    function currentText(){
+      const t = out.textContent.trim();
+      return (t && t !== "—" && !t.includes("Enter") && !t.includes("Invalid") && !t.includes("Range"))
+        ? t
+        : "";
+    }
+
+    function updateCopyState(){
+      copyBtn.disabled = !currentText();
+    }
+
     document.getElementById("go").addEventListener("click", () => {
       const k = toInt(document.getElementById("count").value);
       const a = toInt(document.getElementById("min").value);
@@ -121,10 +162,12 @@
 
       if (!Number.isFinite(k) || !Number.isFinite(a) || !Number.isFinite(b)){
         out.textContent = "Enter whole numbers.";
+        updateCopyState();
         return;
       }
       if (k <= 0){
         out.textContent = "Count must be at least 1.";
+        updateCopyState();
         return;
       }
 
@@ -133,14 +176,48 @@
 
       try{
         const nums = sampleUnique(min, max, k);
-        out.textContent = nums.join("  ");
+        out.textContent = nums.join(" ");
+        setToast("");
       } catch {
         const size = max - min + 1;
         out.textContent = (size < k)
           ? `Range too small for ${k} picks.`
           : "Invalid settings.";
       }
+      updateCopyState();
     });
+
+    // Copy to clipboard (with fallback)
+    copyBtn.addEventListener("click", async () => {
+      const text = currentText();
+      if (!text) return;
+
+      try {
+        if (navigator.clipboard && window.isSecureContext) {
+          await navigator.clipboard.writeText(text);
+          setToast("Copied!");
+          return;
+        }
+      } catch (_) {}
+
+      // Fallback for older/permission-restricted browsers
+      const ta = document.createElement("textarea");
+      ta.value = text;
+      ta.setAttribute("readonly", "");
+      ta.style.position = "fixed";
+      ta.style.left = "-9999px";
+      document.body.appendChild(ta);
+      ta.select();
+      try {
+        document.execCommand("copy");
+        setToast("Copied!");
+      } catch {
+        setToast("Copy failed — hold to select.");
+      }
+      document.body.removeChild(ta);
+    });
+
+    updateCopyState();
   </script>
 </body>
-</html>
+</html>      
