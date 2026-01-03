@@ -1,0 +1,116 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>PucKnows</title>
+  <style>
+    html, body { height: 100%; margin: 0; }
+    body{
+      display:grid; place-items:center;
+      font-family: system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, sans-serif;
+      background:#0b0b0b; color:#f5f5f5;
+    }
+    .wrap{ width:min(720px, 92vw); padding:28px 22px; }
+    .hero{
+      background: radial-gradient(1200px 500px at 50% -20%, rgba(255,255,255,.10), transparent 60%);
+      border:1px solid #222; border-radius:22px;
+      padding:28px 18px;
+      text-align:left;
+    }
+    .brand{
+      display:flex; align-items:center; gap:12px;
+      margin-bottom: 10px;
+    }
+    .mark{
+      width:44px; height:44px; border-radius:18px;
+      background:#f5f5f5; color:#0b0b0b;
+      display:grid; place-items:center;
+      font-weight:900;
+      letter-spacing:.5px;
+      user-select:none;
+    }
+    h1{
+      margin:0;
+      font-size: clamp(24px, 4.5vw, 40px);
+      letter-spacing:.2px;
+    }
+    .tagline{
+      margin: 10px 0 18px;
+      font-size: clamp(16px, 2.6vw, 18px);
+      opacity:.8;
+      line-height:1.35;
+    }
+    .grid{
+      display:grid;
+      grid-template-columns: 1fr;
+      gap:12px;
+      margin-top: 18px;
+    }
+    .card{
+      border:1px solid #222; border-radius:18px;
+      padding:16px;
+      background:#121212;
+    }
+    .card h2{
+      margin:0 0 6px;
+      font-size:16px;
+      opacity:.9;
+    }
+    .card p{
+      margin:0;
+      font-size:14px;
+      opacity:.7;
+      line-height:1.4;
+    }
+    .btn{
+      display:inline-block;
+      margin-top: 18px;
+      text-decoration:none;
+      color:#0b0b0b;
+      background:#f5f5f5;
+      padding:14px 16px;
+      border-radius:16px;
+      font-size:16px;
+      font-weight:800;
+    }
+    .small{
+      margin-top:12px;
+      font-size:13px;
+      opacity:.55;
+    }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <div class="hero">
+      <div class="brand">
+        <div class="mark">PK</div>
+        <h1>PucKnows</h1>
+      </div>
+
+      <div class="tagline">
+        A tiny tap-to-decide tool you keep on your keys — for food, plans, choices, and quick picks.
+      </div>
+
+      <div class="grid">
+        <div class="card">
+          <h2>How it works</h2>
+          <p>Tap the keyring with your phone. Pick a mode. Get an answer instantly.</p>
+        </div>
+        <div class="card">
+          <h2>Why it’s different</h2>
+          <p>It’s physical. No app. No login. Just a tap and a decision.</p>
+        </div>
+        <div class="card">
+          <h2>Privacy</h2>
+          <p>Static pages only. No accounts. Nothing personal needed.</p>
+        </div>
+      </div>
+
+      <a class="btn" href="./index.html">Get started</a>
+      <div class="small">Tip: save it to your home screen for app-like use.</div>
+    </div>
+  </div>
+</body>
+</html>
