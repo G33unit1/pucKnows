@@ -34,7 +34,10 @@
       font-weight:750;
       margin-top: 12px;
       cursor:pointer;
+      transition: transform 120ms ease;
     }
+    .btn:active{ transform: translateY(1px); }
+
     .btn.secondary{
       background:#1c1c1c;
       color:#f5f5f5;
@@ -64,6 +67,18 @@
       min-height: 18px;
     }
     a.back{ display:inline-block; margin-top: 16px; color:#f5f5f5; opacity:.7; text-decoration:none; }
+
+    /* --- subtle animations --- */
+    @keyframes popIn {
+      0%   { transform: translateY(6px) scale(0.98); opacity: 0; }
+      100% { transform: translateY(0)   scale(1);    opacity: 1; }
+    }
+    @keyframes shimmer {
+      0%   { opacity: .35; }
+      100% { opacity: 1; }
+    }
+    .out.anim { animation: popIn 220ms ease-out; }
+    .out.loading { animation: shimmer 120ms ease-in-out infinite alternate; opacity:.7; }
   </style>
 </head>
 <body>
@@ -138,6 +153,7 @@
     const out = document.getElementById("out");
     const toast = document.getElementById("toast");
     const copyBtn = document.getElementById("copy");
+    const goBtn = document.getElementById("go");
 
     function setToast(msg){
       toast.textContent = msg;
@@ -155,6 +171,12 @@
       copyBtn.disabled = !currentText();
     }
 
+    function setBusy(isBusy){
+      goBtn.disabled = isBusy;
+      goBtn.style.opacity = isBusy ? "0.85" : "1";
+      goBtn.style.cursor = isBusy ? "default" : "pointer";
+    }
+
     document.getElementById("go").addEventListener("click", () => {
       const k = toInt(document.getElementById("count").value);
       const a = toInt(document.getElementById("min").value);
@@ -162,11 +184,15 @@
 
       if (!Number.isFinite(k) || !Number.isFinite(a) || !Number.isFinite(b)){
         out.textContent = "Enter whole numbers.";
+        out.classList.remove("loading","anim");
+        setToast("");
         updateCopyState();
         return;
       }
       if (k <= 0){
         out.textContent = "Count must be at least 1.";
+        out.classList.remove("loading","anim");
+        setToast("");
         updateCopyState();
         return;
       }
@@ -174,17 +200,49 @@
       const min = Math.min(a,b);
       const max = Math.max(a,b);
 
-      try{
-        const nums = sampleUnique(min, max, k);
-        out.textContent = nums.join(" ");
-        setToast("");
-      } catch {
-        const size = max - min + 1;
-        out.textContent = (size < k)
-          ? `Range too small for ${k} picks.`
-          : "Invalid settings.";
-      }
-      updateCopyState();
+      // --- subtle shuffle effect ---
+      setBusy(true);
+      out.classList.remove("anim");
+      out.classList.add("loading");
+      setToast("");
+
+      const shuffleMs = 320;
+      const endAt = performance.now() + shuffleMs;
+
+      const tick = () => {
+        // dummy numbers during shuffle (never more than 12 so it doesn't look messy)
+        try {
+          const cap = Math.min(k, Math.max(1, Math.min(12, (max - min + 1))));
+          const dummy = sampleUnique(min, max, cap);
+          out.textContent = dummy.join(" ");
+        } catch (_) {}
+
+        if (performance.now() < endAt) {
+          requestAnimationFrame(tick);
+          return;
+        }
+
+        // final result
+        out.classList.remove("loading");
+        out.classList.add("anim");
+
+        try{
+          const nums = sampleUnique(min, max, k);
+          out.textContent = nums.join(" ");
+          setToast("");
+        } catch {
+          const size = max - min + 1;
+          out.textContent = (size < k)
+            ? `Range too small for ${k} picks.`
+            : "Invalid settings.";
+        }
+
+        updateCopyState();
+        setTimeout(() => out.classList.remove("anim"), 260);
+        setBusy(false);
+      };
+
+      requestAnimationFrame(tick);
     });
 
     // Copy to clipboard (with fallback)
@@ -220,4 +278,4 @@
     updateCopyState();
   </script>
 </body>
-</html>    
+</html>
