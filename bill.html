@@ -1,1 +1,312 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Bill Splitter</title>
 
+  <style>
+    html, body { min-height:100%; margin:0; }
+
+    body{
+      display:grid;
+      place-items:center;
+      font-family:system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif;
+      background:radial-gradient(circle at top,#1b1b1b,#070707 60%);
+      color:#f5f5f5;
+    }
+
+    .wrap{
+      width:min(520px,92vw);
+      padding:28px 22px;
+      text-align:center;
+    }
+
+    .logo{
+      width:110px;
+      height:110px;
+      border-radius:50%;
+      object-fit:cover;
+      margin-bottom:16px;
+      box-shadow:0 0 34px rgba(95,215,255,.35);
+    }
+
+    .title{
+      font-size:13px;
+      letter-spacing:.2em;
+      opacity:.5;
+      font-weight:900;
+      margin-bottom:8px;
+    }
+
+    h1{
+      margin:0 0 22px;
+      font-size:clamp(30px,7vw,44px);
+      font-weight:950;
+      letter-spacing:-.05em;
+    }
+
+    .card{
+      background:linear-gradient(180deg,#151515,#0d0d0d);
+      border:1px solid #252525;
+      border-radius:30px;
+      padding:24px;
+      box-shadow:0 24px 80px rgba(0,0,0,.55);
+    }
+
+    label{
+      display:block;
+      text-align:left;
+      font-size:14px;
+      opacity:.7;
+      margin:14px 0 8px;
+      font-weight:800;
+    }
+
+    input{
+      width:100%;
+      box-sizing:border-box;
+      padding:16px 18px;
+      border-radius:20px;
+      border:1px solid #2e2e2e;
+      background:#080808;
+      color:#f5f5f5;
+      font-size:22px;
+      outline:none;
+    }
+
+    input:focus{
+      border-color:#5fd7ff;
+      box-shadow:0 0 0 3px rgba(95,215,255,.15);
+    }
+
+    .row{
+      display:grid;
+      grid-template-columns:1fr 1fr;
+      gap:12px;
+    }
+
+    .tips{
+      display:grid;
+      grid-template-columns:repeat(5,1fr);
+      gap:8px;
+      margin-top:12px;
+    }
+
+    .tipbtn{
+      border:1px solid #2a2a2a;
+      background:#090909;
+      color:#f5f5f5;
+      border-radius:16px;
+      padding:12px 6px;
+      font-weight:900;
+      cursor:pointer;
+    }
+
+    .tipbtn.active{
+      border-color:#5fd7ff;
+      box-shadow:0 0 18px rgba(95,215,255,.25);
+      color:#5fd7ff;
+    }
+
+    .summary{
+      margin-top:22px;
+      background:#090909;
+      border:1px solid #252525;
+      border-radius:24px;
+      padding:20px;
+    }
+
+    .line{
+      display:flex;
+      justify-content:space-between;
+      gap:16px;
+      font-size:16px;
+      margin:10px 0;
+      opacity:.72;
+    }
+
+    .each{
+      margin-top:18px;
+      padding-top:18px;
+      border-top:1px solid #252525;
+    }
+
+    .each-label{
+      font-size:14px;
+      opacity:.55;
+      font-weight:900;
+      letter-spacing:.14em;
+    }
+
+    .each-value{
+      margin-top:6px;
+      font-size:clamp(42px,12vw,70px);
+      font-weight:950;
+      letter-spacing:-.06em;
+      text-shadow:0 0 30px rgba(95,215,255,.45);
+      transition:.22s ease;
+    }
+
+    .each-value.pop{
+      animation:pop .28s ease;
+    }
+
+    @keyframes pop{
+      0%{ transform:scale(.92); opacity:.55; }
+      60%{ transform:scale(1.08); opacity:1; }
+      100%{ transform:scale(1); opacity:1; }
+    }
+
+    .hint{
+      margin-top:14px;
+      font-size:14px;
+      opacity:.45;
+    }
+
+    .back{
+      display:inline-block;
+      margin-top:26px;
+      color:#f5f5f5;
+      opacity:.65;
+      text-decoration:none;
+      font-size:18px;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="wrap">
+    <img class="logo" src="./logo.png" alt="PucKnows logo">
+
+    <div class="title">PUCKNOWS BILL SPLITTER</div>
+    <h1>Split the damage</h1>
+
+    <div class="card">
+      <label for="bill">💵 Total bill</label>
+      <input id="bill" inputmode="decimal" placeholder="0.00" value="100" />
+
+      <div class="row">
+        <div>
+          <label for="people">👥 People</label>
+          <input id="people" inputmode="numeric" value="2" />
+        </div>
+
+        <div>
+          <label for="tip">🎁 Tip %</label>
+          <input id="tip" inputmode="decimal" value="10" />
+        </div>
+      </div>
+
+      <div class="tips">
+        <button class="tipbtn" data-tip="0">0%</button>
+        <button class="tipbtn" data-tip="10">10%</button>
+        <button class="tipbtn active" data-tip="15">15%</button>
+        <button class="tipbtn" data-tip="20">20%</button>
+        <button class="tipbtn" data-tip="25">25%</button>
+      </div>
+            <div class="summary">
+        <div class="line">
+          <span>Bill</span>
+          <strong id="billAmount">$100.00</strong>
+        </div>
+
+        <div class="line">
+          <span>Tip</span>
+          <strong id="tipAmount">$10.00</strong>
+        </div>
+
+        <div class="line">
+          <span>Total</span>
+          <strong id="totalAmount">$110.00</strong>
+        </div>
+
+        <div class="each">
+          <div class="each-label">EACH PERSON PAYS</div>
+          <div class="each-value" id="eachPerson">$55.00</div>
+        </div>
+      </div>
+
+      <div class="hint">
+        Live calculation • No button required
+      </div>
+
+    </div>
+
+    <a class="back" href="./index.html">← Back</a>
+
+  </div>
+
+<script>
+const billInput = document.getElementById("bill");
+const peopleInput = document.getElementById("people");
+const tipInput = document.getElementById("tip");
+
+const billAmount = document.getElementById("billAmount");
+const tipAmount = document.getElementById("tipAmount");
+const totalAmount = document.getElementById("totalAmount");
+const eachPerson = document.getElementById("eachPerson");
+
+const buttons = document.querySelectorAll(".tipbtn");
+
+function money(value){
+    return "$" + value.toFixed(2);
+}
+
+function animateResult(){
+    eachPerson.classList.remove("pop");
+    void eachPerson.offsetWidth;
+    eachPerson.classList.add("pop");
+}
+
+function calculate(){
+
+    let bill = parseFloat(billInput.value);
+    let people = parseInt(peopleInput.value);
+    let tip = parseFloat(tipInput.value);
+
+    if(isNaN(bill) || bill < 0) bill = 0;
+    if(isNaN(people) || people < 1) people = 1;
+    if(isNaN(tip) || tip < 0) tip = 0;
+
+    const tipValue = bill * (tip / 100);
+    const total = bill + tipValue;
+    const each = total / people;
+
+    billAmount.textContent = money(bill);
+    tipAmount.textContent = money(tipValue);
+    totalAmount.textContent = money(total);
+    eachPerson.textContent = money(each);
+
+    animateResult();
+
+    buttons.forEach(btn=>{
+        btn.classList.toggle(
+            "active",
+            parseFloat(btn.dataset.tip) === tip
+        );
+    });
+}
+
+[billInput, peopleInput, tipInput].forEach(input=>{
+    input.addEventListener("input", calculate);
+});
+
+buttons.forEach(btn=>{
+    btn.addEventListener("click", e=>{
+        e.preventDefault();
+        tipInput.value = btn.dataset.tip;
+        calculate();
+
+        if(navigator.vibrate){
+            navigator.vibrate(10);
+        }
+    });
+});
+
+calculate();
+
+</script>
+
+</body>
+</html>
