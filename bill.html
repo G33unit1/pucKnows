@@ -1,256 +1,402 @@
 <!doctype html>
 <html lang="en">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Bill Splitter</title>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Bill Splitter</title>
 
-  <style>
-    html, body { min-height:100%; margin:0; }
+<style>
 
-    body{
-      display:grid;
-      place-items:center;
-      font-family:system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif;
-      background:radial-gradient(circle at top,#1b1b1b,#070707 60%);
-      color:#f5f5f5;
-    }
+html,body{
+margin:0;
+min-height:100%;
+}
 
-    .wrap{
-      width:min(520px,92vw);
-      padding:28px 22px;
-      text-align:center;
-    }
+body{
+display:grid;
+place-items:center;
+font-family:system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif;
+background:radial-gradient(circle at top,#1b1b1b,#070707 60%);
+color:#f5f5f5;
+}
 
-    .logo{
-      width:110px;
-      height:110px;
-      border-radius:50%;
-      object-fit:cover;
-      margin-bottom:16px;
-      box-shadow:0 0 34px rgba(95,215,255,.35);
-    }
+.wrap{
+width:min(520px,92vw);
+padding:28px 22px;
+text-align:center;
+}
 
-    .title{
-      font-size:13px;
-      letter-spacing:.2em;
-      opacity:.5;
-      font-weight:900;
-      margin-bottom:8px;
-    }
+.logo{
+width:110px;
+height:110px;
+border-radius:50%;
+object-fit:cover;
+margin-bottom:16px;
+box-shadow:0 0 35px rgba(95,215,255,.35);
+}
 
-    h1{
-      margin:0 0 22px;
-      font-size:clamp(30px,7vw,44px);
-      font-weight:950;
-      letter-spacing:-.05em;
-    }
+.title{
+font-size:13px;
+letter-spacing:.2em;
+opacity:.5;
+font-weight:900;
+margin-bottom:8px;
+}
 
-    .card{
-      background:linear-gradient(180deg,#151515,#0d0d0d);
-      border:1px solid #252525;
-      border-radius:30px;
-      padding:24px;
-      box-shadow:0 24px 80px rgba(0,0,0,.55);
-    }
+h1{
+margin:0 0 22px;
+font-size:clamp(30px,7vw,44px);
+font-weight:950;
+letter-spacing:-.05em;
+}
 
-    label{
-      display:block;
-      text-align:left;
-      font-size:14px;
-      opacity:.7;
-      margin:14px 0 8px;
-      font-weight:800;
-    }
+.card{
+background:linear-gradient(180deg,#151515,#0d0d0d);
+border:1px solid #252525;
+border-radius:30px;
+padding:24px;
+box-shadow:0 24px 80px rgba(0,0,0,.55);
+}
 
-    input{
-      width:100%;
-      box-sizing:border-box;
-      padding:16px 18px;
-      border-radius:20px;
-      border:1px solid #2e2e2e;
-      background:#080808;
-      color:#f5f5f5;
-      font-size:22px;
-      outline:none;
-    }
+label{
+display:block;
+text-align:left;
+margin:14px 0 8px;
+font-size:14px;
+font-weight:800;
+opacity:.72;
+}
 
-    input:focus{
-      border-color:#5fd7ff;
-      box-shadow:0 0 0 3px rgba(95,215,255,.15);
-    }
+input{
+width:100%;
+box-sizing:border-box;
+padding:16px;
+border-radius:20px;
+border:1px solid #2c2c2c;
+background:#090909;
+color:white;
+font-size:22px;
+outline:none;
+}
 
-    .row{
-      display:grid;
-      grid-template-columns:1fr 1fr;
-      gap:12px;
-    }
+input:focus{
+border-color:#5fd7ff;
+box-shadow:0 0 0 3px rgba(95,215,255,.18);
+}
 
-    .tips{
-      display:grid;
-      grid-template-columns:repeat(5,1fr);
-      gap:8px;
-      margin-top:12px;
-    }
+.row{
+display:grid;
+grid-template-columns:1fr 1fr;
+gap:12px;
+}
 
-    .tipbtn{
-      border:1px solid #2a2a2a;
-      background:#090909;
-      color:#f5f5f5;
-      border-radius:16px;
-      padding:12px 6px;
-      font-weight:900;
-      cursor:pointer;
-    }
+.tips{
+display:grid;
+grid-template-columns:repeat(5,1fr);
+gap:8px;
+margin-top:14px;
+}
 
-    .tipbtn.active{
-      border-color:#5fd7ff;
-      box-shadow:0 0 18px rgba(95,215,255,.25);
-      color:#5fd7ff;
-    }
+.tip{
+background:#090909;
+border:1px solid #2b2b2b;
+border-radius:15px;
+padding:12px;
+font-weight:900;
+color:white;
+cursor:pointer;
+transition:.15s;
+}
 
-    .summary{
-      margin-top:22px;
-      background:#090909;
-      border:1px solid #252525;
-      border-radius:24px;
-      padding:20px;
-    }
+.tip.active{
+border-color:#5fd7ff;
+box-shadow:0 0 18px rgba(95,215,255,.25);
+color:#5fd7ff;
+}
 
-    .line{
-      display:flex;
-      justify-content:space-between;
-      gap:16px;
-      font-size:16px;
-      margin:10px 0;
-      opacity:.72;
-    }
+.roundBox{
+margin-top:18px;
+display:flex;
+align-items:center;
+justify-content:center;
+gap:10px;
+font-size:16px;
+font-weight:700;
+}
 
-    .each{
-      margin-top:18px;
-      padding-top:18px;
-      border-top:1px solid #252525;
-    }
+.roundBox input{
+width:22px;
+height:22px;
+accent-color:#5fd7ff;
+}
 
-    .each-label{
-      font-size:14px;
-      opacity:.55;
-      font-weight:900;
-      letter-spacing:.14em;
-    }
+.summary{
 
-    .each-value{
-      margin-top:6px;
-      font-size:clamp(42px,12vw,70px);
-      font-weight:950;
-      letter-spacing:-.06em;
-      text-shadow:0 0 30px rgba(95,215,255,.45);
-      transition:.22s ease;
-    }
+margin-top:22px;
 
-    .each-value.pop{
-      animation:pop .28s ease;
-    }
+background:#090909;
 
-    @keyframes pop{
-      0%{ transform:scale(.92); opacity:.55; }
-      60%{ transform:scale(1.08); opacity:1; }
-      100%{ transform:scale(1); opacity:1; }
-    }
+border:1px solid #252525;
 
-    .hint{
-      margin-top:14px;
-      font-size:14px;
-      opacity:.45;
-    }
+border-radius:24px;
 
-    .back{
-      display:inline-block;
-      margin-top:26px;
-      color:#f5f5f5;
-      opacity:.65;
-      text-decoration:none;
-      font-size:18px;
-    }
-  </style>
+padding:20px;
+
+}
+
+.line{
+
+display:flex;
+
+justify-content:space-between;
+
+margin:10px 0;
+
+opacity:.72;
+
+font-size:16px;
+
+}
+
+.each{
+
+margin-top:20px;
+
+padding-top:20px;
+
+border-top:1px solid #252525;
+
+}
+
+.eachLabel{
+
+font-size:14px;
+
+opacity:.55;
+
+letter-spacing:.15em;
+
+font-weight:900;
+
+}
+
+.eachValue{
+
+font-size:clamp(44px,12vw,72px);
+
+font-weight:950;
+
+margin-top:8px;
+
+text-shadow:0 0 26px rgba(95,215,255,.45);
+
+transition:.2s;
+
+}
+
+.eachValue.pop{
+
+animation:pop .25s;
+
+}
+
+@keyframes pop{
+
+0%{transform:scale(.9);}
+
+50%{transform:scale(1.08);}
+
+100%{transform:scale(1);}
+
+}
+
+.buttons{
+
+display:grid;
+
+grid-template-columns:1fr 1fr;
+
+gap:12px;
+
+margin-top:22px;
+
+}
+
+.action{
+
+border:0;
+
+border-radius:22px;
+
+padding:18px;
+
+font-size:18px;
+
+font-weight:900;
+
+cursor:pointer;
+
+transition:.15s;
+
+}
+
+.share{
+
+background:#5fd7ff;
+
+color:#071018;
+
+}
+
+.whopays{
+
+background:#151515;
+
+color:white;
+
+border:1px solid #303030;
+
+}
+
+.action:active{
+
+transform:scale(.98);
+
+}
+
+.back{
+
+display:inline-block;
+
+margin-top:24px;
+
+text-decoration:none;
+
+color:white;
+
+opacity:.65;
+
+}
+
+</style>
 </head>
 
 <body>
-  <div class="wrap">
-    <img class="logo" src="./logo.png" alt="PucKnows logo">
 
-    <div class="title">PUCKNOWS BILL SPLITTER</div>
-    <h1>Split the damage</h1>
+<div class="wrap">
 
-    <div class="card">
-      <label for="bill">💵 Total bill</label>
-      <input id="bill" inputmode="decimal" placeholder="0.00" value="100" />
+<img src="./logo.png" class="logo">
 
-      <div class="row">
-        <div>
-          <label for="people">👥 People</label>
-          <input id="people" inputmode="numeric" value="2" />
-        </div>
+<div class="title">
 
-        <div>
-          <label for="tip">🎁 Tip %</label>
-          <input id="tip" inputmode="decimal" value="10" />
-        </div>
-      </div>
+PUCKNOWS BILL SPLITTER
 
-      <div class="tips">
-        <button class="tipbtn" data-tip="0">0%</button>
-        <button class="tipbtn" data-tip="10">10%</button>
-        <button class="tipbtn active" data-tip="15">15%</button>
-        <button class="tipbtn" data-tip="20">20%</button>
-        <button class="tipbtn" data-tip="25">25%</button>
-      </div>
-            <div class="summary">
-        <div class="line">
-          <span>Bill</span>
-          <strong id="billAmount">$100.00</strong>
-        </div>
+</div>
 
-        <div class="line">
-          <span>Tip</span>
-          <strong id="tipAmount">$10.00</strong>
-        </div>
+<h1>
 
-        <div class="line">
-          <span>Total</span>
-          <strong id="totalAmount">$110.00</strong>
-        </div>
+Split the damage
 
-        <div class="each">
-          <div class="each-label">EACH PERSON PAYS</div>
-          <div class="each-value" id="eachPerson">$55.00</div>
-        </div>
-      </div>
+</h1>
 
-      <div class="hint">
-        Live calculation • No button required
-      </div>
+<div class="card">
 
-    </div>
+<label>Total Bill</label>
 
-    <a class="back" href="./index.html">← Back</a>
+<input id="bill" value="100">
 
+<div class="row">
+
+<div>
+
+<label>People</label>
+
+<input id="people" value="4">
+
+</div>
+
+<div>
+
+<label>Tip %</label>
+
+<input id="tip" value="15">
+
+</div>
+
+</div>
+
+<div class="tips">
+
+<button class="tip">0%</button>
+
+<button class="tip">10%</button>
+
+<button class="tip active">15%</button>
+
+<button class="tip">20%</button>
+
+<button class="tip">25%</button>
+
+</div>
+
+<div class="roundBox">
+
+<input type="checkbox" id="roundUp">
+
+<label for="roundUp" style="margin:0;">
+💰 Round each share up
+</label>
+
+</div>
+<div class="summary">
+  <div class="line">
+    <span>Bill</span>
+    <strong id="billAmount">$100.00</strong>
   </div>
 
+  <div class="line">
+    <span>Tip</span>
+    <strong id="tipAmount">$15.00</strong>
+  </div>
+
+  <div class="line">
+    <span>Total</span>
+    <strong id="totalAmount">$115.00</strong>
+  </div>
+
+  <div class="each">
+    <div class="eachLabel">EACH PERSON PAYS</div>
+    <div class="eachValue" id="eachPerson">$28.75</div>
+  </div>
+</div>
+
+<div class="buttons">
+  <button class="action share" id="shareBtn">📤 Share</button>
+  <button class="action whopays" id="whoBtn">🎉 Who Pays?</button>
+</div>
+
+<div class="back">
+  <a class="back" href="./index.html">← Back</a>
+</div>
 <script>
-const billInput = document.getElementById("bill");
-const peopleInput = document.getElementById("people");
-const tipInput = document.getElementById("tip");
 
-const billAmount = document.getElementById("billAmount");
-const tipAmount = document.getElementById("tipAmount");
-const totalAmount = document.getElementById("totalAmount");
-const eachPerson = document.getElementById("eachPerson");
+const bill=document.getElementById("bill");
+const people=document.getElementById("people");
+const tip=document.getElementById("tip");
+const round=document.getElementById("roundUp");
 
-const buttons = document.querySelectorAll(".tipbtn");
+const billAmount=document.getElementById("billAmount");
+const tipAmount=document.getElementById("tipAmount");
+const totalAmount=document.getElementById("totalAmount");
+const eachPerson=document.getElementById("eachPerson");
 
-function money(value){
-    return "$" + value.toFixed(2);
+const shareBtn=document.getElementById("shareBtn");
+const whoBtn=document.getElementById("whoBtn");
+
+const tipButtons=document.querySelectorAll(".tip");
+
+function money(v){
+    return "$"+v.toFixed(2);
 }
 
 function animateResult(){
@@ -261,48 +407,137 @@ function animateResult(){
 
 function calculate(){
 
-    let bill = parseFloat(billInput.value);
-    let people = parseInt(peopleInput.value);
-    let tip = parseFloat(tipInput.value);
+    let b=parseFloat(bill.value);
+    let p=parseInt(people.value);
+    let t=parseFloat(tip.value);
 
-    if(isNaN(bill) || bill < 0) bill = 0;
-    if(isNaN(people) || people < 1) people = 1;
-    if(isNaN(tip) || tip < 0) tip = 0;
+    if(isNaN(b)||b<0)b=0;
+    if(isNaN(p)||p<1)p=1;
+    if(isNaN(t)||t<0)t=0;
 
-    const tipValue = bill * (tip / 100);
-    const total = bill + tipValue;
-    const each = total / people;
+    const tipValue=b*(t/100);
 
-    billAmount.textContent = money(bill);
-    tipAmount.textContent = money(tipValue);
-    totalAmount.textContent = money(total);
-    eachPerson.textContent = money(each);
+    const total=b+tipValue;
+
+    let each=total/p;
+
+    if(round.checked){
+        each=Math.ceil(each);
+    }
+
+    billAmount.textContent=money(b);
+    tipAmount.textContent=money(tipValue);
+    totalAmount.textContent=money(total);
+    eachPerson.textContent=money(each);
 
     animateResult();
 
-    buttons.forEach(btn=>{
+    tipButtons.forEach(btn=>{
         btn.classList.toggle(
             "active",
-            parseFloat(btn.dataset.tip) === tip
+            parseFloat(btn.textContent)==t
         );
     });
+
 }
 
-[billInput, peopleInput, tipInput].forEach(input=>{
-    input.addEventListener("input", calculate);
+[bill,people,tip].forEach(el=>{
+    el.addEventListener("input",calculate);
 });
 
-buttons.forEach(btn=>{
-    btn.addEventListener("click", e=>{
-        e.preventDefault();
-        tipInput.value = btn.dataset.tip;
+round.addEventListener("change",calculate);
+
+tipButtons.forEach(btn=>{
+
+    btn.onclick=()=>{
+
+        tip.value=parseFloat(btn.textContent);
+
         calculate();
 
         if(navigator.vibrate){
             navigator.vibrate(10);
         }
-    });
+
+    };
+
 });
+
+shareBtn.onclick=async()=>{
+
+    const text=
+`Bill: ${billAmount.textContent}
+Tip: ${tipAmount.textContent}
+Total: ${totalAmount.textContent}
+
+Each person pays ${eachPerson.textContent}
+
+Calculated with PucKnows`;
+
+    if(navigator.share){
+
+        try{
+
+            await navigator.share({
+                title:"Bill Split",
+                text:text
+            });
+
+        }catch{}
+
+    }else{
+
+        navigator.clipboard.writeText(text);
+
+        alert("Copied to clipboard.");
+
+    }
+
+};
+
+whoBtn.onclick=()=>{
+
+    let p=parseInt(people.value);
+
+    if(isNaN(p)||p<1)p=1;
+
+    let count=0;
+
+    const interval=setInterval(()=>{
+
+        count++;
+
+        const random=Math.floor(Math.random()*p)+1;
+
+        whoBtn.textContent="👤 Person "+random;
+
+        if(navigator.vibrate){
+            navigator.vibrate(8);
+        }
+
+        if(count>18){
+
+            clearInterval(interval);
+
+            const winner=Math.floor(Math.random()*p)+1;
+
+            whoBtn.textContent="🎉 Person "+winner+" Pays!";
+
+            if(navigator.vibrate){
+                navigator.vibrate([40,30,90]);
+            }
+
+            setTimeout(()=>{
+
+                whoBtn.textContent="🎉 Who Pays?";
+
+            },3500);
+
+        }
+
+    },90);
+
+};
 
 calculate();
 
