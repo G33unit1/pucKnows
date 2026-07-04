@@ -4,36 +4,198 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Pick</title>
+
   <style>
-    html, body { height: 100%; margin: 0; }
-    body {
-      display: grid;
-      place-items: center;
-      font-family: system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, sans-serif;
-      background: #0b0b0b;
-      color: #f5f5f5;
-      text-align: center;
+    html, body { height:100%; margin:0; }
+
+    body{
+      display:grid;
+      place-items:center;
+      font-family:system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif;
+      background:
+        radial-gradient(circle at top, #1b1b1b, #070707 60%);
+      color:#f5f5f5;
+      text-align:center;
+      overflow:hidden;
     }
-    #answer {
-      font-size: clamp(40px, 10vw, 110px);
-      font-weight: 800;
-      letter-spacing: -0.02em;
-      opacity: 0;
-      transition: opacity 150ms ease;
-      padding: 0 16px;
-      user-select: none;
+
+    .wrap{
+      width:min(520px,92vw);
+      padding:24px;
     }
-    #choices {
-      margin-top: 14px;
-      font-size: clamp(14px, 3.5vw, 18px);
-      opacity: 0.55;
-      user-select: none;
+
+    .title{
+      font-size:14px;
+      letter-spacing:.18em;
+      opacity:.55;
+      margin-bottom:18px;
+      font-weight:800;
+    }
+
+    .card{
+      background:linear-gradient(180deg,#151515,#0d0d0d);
+      border:1px solid #252525;
+      border-radius:30px;
+      padding:28px 20px;
+      box-shadow:0 24px 80px rgba(0,0,0,.55);
+    }
+
+    .versus{
+      display:grid;
+      grid-template-columns:1fr auto 1fr;
+      gap:10px;
+      align-items:center;
+      margin-bottom:28px;
+    }
+
+    .choice{
+      background:#090909;
+      border:1px solid #252525;
+      border-radius:20px;
+      padding:16px 10px;
+      min-height:58px;
+      display:grid;
+      place-items:center;
+      font-weight:850;
+      font-size:clamp(16px,4vw,22px);
+    }
+
+    .vs{
+      opacity:.45;
+      font-weight:900;
+    }
+
+    .coin-area{
+      height:260px;
+      display:grid;
+      place-items:center;
+      perspective:1000px;
+    }
+
+    .coin{
+      width:190px;
+      height:190px;
+      border-radius:50%;
+      position:relative;
+      transform-style:preserve-3d;
+      transition:transform 2.8s cubic-bezier(.12,.82,.18,1);
+      filter:drop-shadow(0 28px 38px rgba(0,0,0,.75));
+    }
+
+    .coin.flipping{
+      animation:glow 1s infinite alternate;
+    }
+
+    @keyframes glow{
+      from{ filter:drop-shadow(0 28px 38px rgba(0,0,0,.75)); }
+      to{ filter:drop-shadow(0 0 38px rgba(95,215,255,.65)); }
+    }
+
+    .side{
+      position:absolute;
+      inset:0;
+      border-radius:50%;
+      backface-visibility:hidden;
+      display:grid;
+      place-items:center;
+      border:8px solid #2b2b2b;
+      box-shadow:
+        inset 0 0 22px rgba(255,255,255,.12),
+        inset 0 0 55px rgba(0,0,0,.55);
+      font-size:54px;
+      font-weight:950;
+    }
+
+    .front{
+      background:
+        radial-gradient(circle at 35% 25%, #ffffff, #999 38%, #2b2b2b 78%);
+      color:#080808;
+    }
+
+    .back{
+      background:
+        radial-gradient(circle at 35% 25%, #5fd7ff, #1d6f91 42%, #06212d 78%);
+      color:white;
+      transform:rotateY(180deg);
+    }
+
+    .coin-label{
+      font-size:22px;
+      letter-spacing:.08em;
+    }
+
+    .status{
+      margin-top:8px;
+      min-height:30px;
+      font-size:18px;
+      opacity:.65;
+      font-weight:700;
+    }
+
+    .answer{
+      margin-top:18px;
+      font-size:clamp(34px,9vw,62px);
+      font-weight:950;
+      letter-spacing:-.04em;
+      min-height:74px;
+      opacity:0;
+      transform:scale(.92);
+      transition:.35s ease;
+    }
+
+    .answer.show{
+      opacity:1;
+      transform:scale(1);
+      text-shadow:0 0 28px rgba(95,215,255,.35);
+    }
+
+    .lock{
+      margin-top:10px;
+      font-size:14px;
+      opacity:.45;
+      min-height:22px;
+    }
+
+    .back-link{
+      display:inline-block;
+      margin-top:26px;
+      color:#f5f5f5;
+      opacity:.65;
+      text-decoration:none;
+      font-size:18px;
     }
   </style>
 </head>
+
 <body>
-  <div id="answer">…</div>
-  <div id="choices"></div>
+  <div class="wrap">
+    <div class="title">PUCKNOWS PICK</div>
+
+    <div class="card">
+      <div class="versus">
+        <div class="choice" id="choiceA">Option A</div>
+        <div class="vs">VS</div>
+        <div class="choice" id="choiceB">Option B</div>
+      </div>
+
+      <div class="coin-area">
+        <div class="coin" id="coin">
+          <div class="side front">
+            <div class="coin-label">A</div>
+          </div>
+          <div class="side back">
+            <div class="coin-label">B</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="status" id="status">PucKnows is choosing...</div>
+      <div class="answer" id="answer">…</div>
+      <div class="lock" id="lock"></div>
+    </div>
+
+    <a class="back-link" href="./index.html">← Back</a>
+  </div>
 
   <script>
     const LOCK_MS = 45 * 1000;
@@ -47,32 +209,79 @@
     const A = getParam("a", "Option A");
     const B = getParam("b", "Option B");
 
-    // Unique lock per pair so Indian/Chinese doesn't lock Netflix/Game
-    const KEY = "pick_lock_v1_" + btoa(unescape(encodeURIComponent(A + "|" + B))).slice(0, 24);
+    const KEY = "pick_lock_v2_" + btoa(unescape(encodeURIComponent(A + "|" + B))).slice(0, 24);
+
+    const coin = document.getElementById("coin");
+    const answerEl = document.getElementById("answer");
+    const statusEl = document.getElementById("status");
+    const lockEl = document.getElementById("lock");
+
+    document.getElementById("choiceA").textContent = A;
+    document.getElementById("choiceB").textContent = B;
 
     function pick50() {
       return Math.random() < 0.5 ? A : B;
     }
 
-    function reveal(result) {
-      const ans = document.getElementById("answer");
-      const ch = document.getElementById("choices");
-      ans.textContent = result;
-      ch.textContent = `${A}  vs  ${B}`;
-      requestAnimationFrame(() => { ans.style.opacity = 1; });
+    function showLock(until){
+      const left = Math.max(0, Math.ceil((until - Date.now()) / 1000));
+      lockEl.textContent = left > 0 ? `Locked for ${left}s` : "";
+    }
+
+    function reveal(result, until, instant = false) {
+      const isB = result === B;
+
+      coin.classList.remove("flipping");
+      coin.style.transform = isB
+        ? "rotateY(1980deg)"
+        : "rotateY(1800deg)";
+
+      statusEl.textContent = "PucKnows chose";
+      answerEl.textContent = result;
+
+      setTimeout(() => {
+        answerEl.classList.add("show");
+        if (navigator.vibrate && !instant) navigator.vibrate([40, 30, 90]);
+      }, instant ? 0 : 250);
+
+      showLock(until);
+      setInterval(() => showLock(until), 1000);
     }
 
     const now = Date.now();
     let saved = null;
-    try { saved = JSON.parse(localStorage.getItem(KEY) || "null"); } catch {}
+
+    try {
+      saved = JSON.parse(localStorage.getItem(KEY) || "null");
+    } catch {}
 
     if (saved && saved.until > now && saved.answer) {
-      reveal(saved.answer);
+      statusEl.textContent = "Saved decision";
+      reveal(saved.answer, saved.until, true);
     } else {
-      const answer = pick50();
+      const result = pick50();
       const until = now + LOCK_MS;
-      localStorage.setItem(KEY, JSON.stringify({ answer, until, answerA: A, answerB: B }));
-      setTimeout(() => reveal(answer), THINK_MS);
+
+      localStorage.setItem(KEY, JSON.stringify({
+        answer: result,
+        until,
+        answerA: A,
+        answerB: B
+      }));
+
+      coin.classList.add("flipping");
+
+      let ticks = 0;
+      const tick = setInterval(() => {
+        ticks++;
+        statusEl.textContent = ticks % 2 ? "Flipping..." : "Choosing...";
+        if (navigator.vibrate) navigator.vibrate(8);
+      }, 180);
+
+      setTimeout(() => {
+        clearInterval(tick);
+        reveal(result, until);
+      }, THINK_MS + 2300);
     }
   </script>
 </body>
