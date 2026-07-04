@@ -4,65 +4,224 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>A or B?</title>
+
   <style>
-    html, body { height: 100%; margin: 0; }
+    html, body { min-height:100%; margin:0; }
+
     body{
-      display:grid; place-items:center;
-      font-family: system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, sans-serif;
-      background:#0b0b0b; color:#f5f5f5;
-    }
-    .wrap{ width:min(520px, 92vw); padding:24px; }
-    .back{
-      display:inline-block; margin-bottom:18px;
-      color:#f5f5f5; opacity:.6; text-decoration:none; font-weight:600;
-    }
-    h1{ margin:0 0 16px; font-size: clamp(22px, 5vw, 32px); opacity:.9; }
-    input{
-      width:100%;
-      padding:16px 14px;
-      margin:10px 0;
-      border-radius:14px;
-      border: 1px solid rgba(255,255,255,.18);
-      background: rgba(255,255,255,.06);
+      display:grid;
+      place-items:center;
+      font-family:system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif;
+      background:radial-gradient(circle at top,#1b1b1b,#070707 60%);
       color:#f5f5f5;
-      font-size:18px;
-      outline:none;
     }
-    button{
-      width:100%;
-      margin-top:14px;
-      padding:18px 16px;
-      border-radius:16px;
-      border:0;
-      background:#f5f5f5;
-      color:#0b0b0b;
-      font-size:20px;
+
+    .wrap{
+      width:min(520px,92vw);
+      padding:28px 22px;
+      text-align:center;
+    }
+
+    .logo{
+      width:118px;
+      height:118px;
+      border-radius:50%;
+      object-fit:cover;
+      margin-bottom:16px;
+      box-shadow:0 0 38px rgba(95,215,255,.38);
+    }
+
+    .title{
+      font-size:13px;
+      letter-spacing:.2em;
+      opacity:.5;
+      font-weight:900;
+      margin-bottom:8px;
+    }
+
+    h1{
+      margin:0 0 22px;
+      font-size:clamp(30px,7vw,44px);
+      font-weight:950;
+      letter-spacing:-.05em;
+    }
+
+    .card{
+      background:linear-gradient(180deg,#151515,#0d0d0d);
+      border:1px solid #252525;
+      border-radius:30px;
+      padding:24px;
+      box-shadow:0 24px 80px rgba(0,0,0,.55);
+    }
+
+    label{
+      display:block;
+      text-align:left;
+      font-size:14px;
+      opacity:.7;
+      margin:0 0 8px;
       font-weight:800;
     }
-    .hint{ margin-top:14px; font-size:14px; opacity:.55; text-align:center; }
+
+    input{
+      width:100%;
+      box-sizing:border-box;
+      padding:18px 18px;
+      border-radius:22px;
+      border:1px solid #2e2e2e;
+      background:#080808;
+      color:#f5f5f5;
+      font-size:22px;
+      outline:none;
+    }
+
+    input:focus{
+      border-color:#5fd7ff;
+      box-shadow:0 0 0 3px rgba(95,215,255,.15);
+    }
+
+    .field{
+      margin-bottom:16px;
+    }
+
+    .vs{
+      width:54px;
+      height:54px;
+      border-radius:50%;
+      margin:8px auto 18px;
+      display:grid;
+      place-items:center;
+      background:#090909;
+      border:1px solid #2e2e2e;
+      color:#5fd7ff;
+      font-weight:950;
+      box-shadow:0 0 22px rgba(95,215,255,.18);
+    }
+
+    button{
+      width:100%;
+      margin-top:4px;
+      padding:19px 16px;
+      border-radius:24px;
+      border:0;
+      background:linear-gradient(180deg,#5fd7ff,#168ed0);
+      color:#041018;
+      font-size:21px;
+      font-weight:950;
+      cursor:pointer;
+      box-shadow:0 0 28px rgba(95,215,255,.32);
+      transition:.16s ease;
+    }
+
+    button:active{
+      transform:scale(.98);
+    }
+
+    .preview{
+      margin-top:18px;
+      padding:16px;
+      border-radius:22px;
+      background:#090909;
+      border:1px solid #252525;
+      font-size:15px;
+      opacity:.75;
+      line-height:1.45;
+    }
+
+    .hint{
+      margin-top:14px;
+      font-size:14px;
+      opacity:.45;
+    }
+
+    .back{
+      display:inline-block;
+      margin-top:26px;
+      color:#f5f5f5;
+      opacity:.65;
+      text-decoration:none;
+      font-size:18px;
+    }
+
+    .fade{
+      animation:fadeOut .28s ease forwards;
+    }
+
+    @keyframes fadeOut{
+      to{ opacity:0; transform:scale(.98); }
+    }
   </style>
 </head>
+
 <body>
-  <div class="wrap">
-    <a class="back" href="./">←</a>
-    <h1>A or B?</h1>
+  <div class="wrap" id="wrap">
+    <img class="logo" src="./logo.png" alt="PucKnows logo">
 
-    <form id="f">
-      <input id="a" placeholder="Option A (e.g., Indian)" autocomplete="off" />
-      <input id="b" placeholder="Option B (e.g., Chinese)" autocomplete="off" />
-      <button type="submit">Decide</button>
-    </form>
+    <div class="title">PUCKNOWS PICK</div>
+    <h1>What are you deciding?</h1>
 
-    <div class="hint">Tip: keep it short.</div>
+    <div class="card">
+      <form id="f">
+        <div class="field">
+          <label for="a">Option one</label>
+          <input id="a" placeholder="e.g. Indian" autocomplete="off" />
+        </div>
+
+        <div class="vs">VS</div>
+
+        <div class="field">
+          <label for="b">Option two</label>
+          <input id="b" placeholder="e.g. Chinese" autocomplete="off" />
+        </div>
+
+        <button type="submit">⚡ ASK THE PUCK</button>
+      </form>
+
+      <div class="preview" id="preview">
+        Option one vs Option two
+      </div>
+
+      <div class="hint">Keep it short. The puck will decide.</div>
+    </div>
+
+    <a class="back" href="./index.html">← Back</a>
   </div>
 
   <script>
-    document.getElementById("f").addEventListener("submit", (e) => {
+    const form = document.getElementById("f");
+    const inputA = document.getElementById("a");
+    const inputB = document.getElementById("b");
+    const preview = document.getElementById("preview");
+    const wrap = document.getElementById("wrap");
+
+    function clean(v, fallback){
+      return v.trim() || fallback;
+    }
+
+    function updatePreview(){
+      const a = clean(inputA.value, "Option one");
+      const b = clean(inputB.value, "Option two");
+      preview.textContent = `${a} vs ${b}`;
+    }
+
+    inputA.addEventListener("input", updatePreview);
+    inputB.addEventListener("input", updatePreview);
+
+    form.addEventListener("submit", (e) => {
       e.preventDefault();
-      const a = document.getElementById("a").value.trim() || "Option A";
-      const b = document.getElementById("b").value.trim() || "Option B";
+
+      const a = clean(inputA.value, "Option A");
+      const b = clean(inputB.value, "Option B");
+
       const url = "./pick.html?a=" + encodeURIComponent(a) + "&b=" + encodeURIComponent(b);
-      location.href = url;
+
+      if (navigator.vibrate) navigator.vibrate([25,25,60]);
+
+      wrap.classList.add("fade");
+
+      setTimeout(() => {
+        location.href = url;
+      }, 220);
     });
   </script>
 </body>
