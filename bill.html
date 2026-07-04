@@ -6,6 +6,17 @@
 <title>Bill Splitter</title>
 
 <style>
+  
+.names{
+  margin-top:18px;
+  display:grid;
+  gap:10px;
+}
+
+.nameInput{
+  font-size:18px;
+  padding:14px 16px;
+}  
 
 html,body{
 margin:0;
@@ -385,8 +396,11 @@ Split the damage
 </div>
 
 </div>
-
+  
+<div class="names" id="names"></div>
+  
 <div class="tips">
+  
 
 <button class="tip">0%</button>
 
@@ -556,16 +570,11 @@ Calculated with PucKnows`;
 
 };
 
-whoBtn.onclick = () => {
-  let p = parseInt(people.value);
+let p = parseInt(people.value);
 
-  if (isNaN(p) || p < 1) p = 1;
+if (isNaN(p) || p < 1) p = 1;
 
-  const names = [];
-
-  for (let i = 1; i <= p; i++) {
-    names.push("Person " + i);
-  }
+const names = getNames();
 
   const overlay = document.getElementById("whoOverlay");
   const overlayLogo = document.getElementById("overlayLogo");
@@ -609,7 +618,35 @@ whoBtn.onclick = () => {
     }
   }, 90);
 };
+const namesBox = document.getElementById("names");
 
+function buildNameInputs(){
+  let p = parseInt(people.value);
+  if(isNaN(p) || p < 1) p = 1;
+
+  const existing = Array.from(document.querySelectorAll(".nameInput"))
+    .map(input => input.value);
+
+  namesBox.innerHTML = "";
+
+  for(let i = 0; i < p; i++){
+    const input = document.createElement("input");
+    input.className = "nameInput";
+    input.placeholder = "Name " + (i + 1);
+    input.value = existing[i] || "";
+    namesBox.appendChild(input);
+  }
+}
+
+function getNames(){
+  return Array.from(document.querySelectorAll(".nameInput")).map((input, i) => {
+    return input.value.trim() || "Person " + (i + 1);
+  });
+}
+
+people.addEventListener("input", buildNameInputs);
+
+buildNameInputs();
 calculate();
 
 </script>
