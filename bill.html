@@ -277,7 +277,68 @@ color:white;
 opacity:.65;
 
 }
+.overlay{
+position:fixed;
+inset:0;
+background:rgba(5,5,5,.96);
+display:grid;
+place-items:center;
+z-index:999;
+transition:.3s;
+}
 
+.hidden{
+display:none;
+}
+
+.overlay-content{
+text-align:center;
+padding:20px;
+}
+
+.overlay-logo{
+width:170px;
+height:170px;
+border-radius:50%;
+box-shadow:0 0 50px rgba(95,215,255,.65);
+animation:none;
+}
+
+.overlay-logo.spin{
+animation:spinPuck 2.8s linear infinite;
+}
+
+@keyframes spinPuck{
+from{
+transform:rotate(0deg);
+}
+to{
+transform:rotate(360deg);
+}
+}
+
+.overlay-title{
+margin-top:22px;
+font-size:16px;
+letter-spacing:.2em;
+opacity:.65;
+font-weight:900;
+}
+
+.overlay-name{
+margin-top:26px;
+font-size:48px;
+font-weight:950;
+min-height:60px;
+}
+
+.overlay-result{
+margin-top:30px;
+font-size:56px;
+font-weight:950;
+color:#5fd7ff;
+text-shadow:0 0 28px rgba(95,215,255,.55);
+}
 </style>
 </head>
 
@@ -495,53 +556,83 @@ Calculated with PucKnows`;
 
 };
 
-whoBtn.onclick=()=>{
+whoBtn.onclick = () => {
+  let p = parseInt(people.value);
 
-    let p=parseInt(people.value);
+  if (isNaN(p) || p < 1) p = 1;
 
-    if(isNaN(p)||p<1)p=1;
+  const names = [];
 
-    let count=0;
+  for (let i = 1; i <= p; i++) {
+    names.push("Person " + i);
+  }
 
-    const interval=setInterval(()=>{
+  const overlay = document.getElementById("whoOverlay");
+  const overlayLogo = document.getElementById("overlayLogo");
+  const overlayName = document.getElementById("overlayName");
+  const overlayResult = document.getElementById("overlayResult");
 
-        count++;
+  overlay.classList.remove("hidden");
+  overlayLogo.classList.add("spin");
+  overlayResult.textContent = "";
+  overlayName.textContent = "Consulting...";
 
-        const random=Math.floor(Math.random()*p)+1;
+  let count = 0;
 
-        whoBtn.textContent="👤 Person "+random;
+  const interval = setInterval(() => {
+    count++;
 
-        if(navigator.vibrate){
-            navigator.vibrate(8);
-        }
+    const randomName = names[Math.floor(Math.random() * names.length)];
+    overlayName.textContent = randomName;
 
-        if(count>18){
+    if (navigator.vibrate) {
+      navigator.vibrate(8);
+    }
 
-            clearInterval(interval);
+    if (count > 28) {
+      clearInterval(interval);
 
-            const winner=Math.floor(Math.random()*p)+1;
+      const winner = names[Math.floor(Math.random() * names.length)];
 
-            whoBtn.textContent="🎉 Person "+winner+" Pays!";
+      overlayLogo.classList.remove("spin");
+      overlayName.textContent = "";
+      overlayResult.textContent = "🎉 " + winner + " pays!";
 
-            if(navigator.vibrate){
-                navigator.vibrate([40,30,90]);
-            }
+      if (navigator.vibrate) {
+        navigator.vibrate([40, 30, 90]);
+      }
 
-            setTimeout(()=>{
-
-                whoBtn.textContent="🎉 Who Pays?";
-
-            },3500);
-
-        }
-
-    },90);
-
+      overlay.onclick = () => {
+        overlay.classList.add("hidden");
+        overlay.onclick = null;
+      };
+    }
+  }, 90);
 };
 
 calculate();
 
 </script>
 
+  <div id="whoOverlay" class="overlay hidden">
+
+  <div class="overlay-content">
+
+    <img src="./logo.png" class="overlay-logo" id="overlayLogo">
+
+    <div class="overlay-title">
+      CONSULTING THE PUCK...
+    </div>
+
+    <div class="overlay-name" id="overlayName">
+      Person 1
+    </div>
+
+    <div class="overlay-result" id="overlayResult"></div>
+
+  </div>
+
+  </div>
+  
 </body>
 </html>
