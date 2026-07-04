@@ -29,6 +29,30 @@
       object-fit:cover;
       margin-bottom:18px;
       box-shadow:0 0 40px rgba(95,215,255,.35);
+      transition:transform .6s ease, box-shadow .6s ease;
+    }
+
+    .logo.intro{
+      animation:introPulse 1.2s ease;
+    }
+
+    @keyframes introPulse{
+      0%{
+        transform:rotate(0deg) scale(1);
+        box-shadow:0 0 30px rgba(95,215,255,.25);
+      }
+      25%{
+        transform:rotate(6deg) scale(1.04);
+        box-shadow:0 0 70px rgba(95,215,255,.9);
+      }
+      55%{
+        transform:rotate(-4deg) scale(1.02);
+        box-shadow:0 0 55px rgba(95,215,255,.75);
+      }
+      100%{
+        transform:rotate(0deg) scale(1);
+        box-shadow:0 0 40px rgba(95,215,255,.35);
+      }
     }
 
     .eyebrow{
@@ -157,5 +181,38 @@
       Tap the puck anytime · <a href="./about.html">What is PucKnows?</a>
     </div>
   </div>
+
+  <audio id="startupSound" preload="auto">
+    <source src="./startup.mp3" type="audio/mpeg">
+  </audio>
+
+  <script>
+    window.addEventListener("load", () => {
+      const logo = document.querySelector(".logo");
+      const sound = document.getElementById("startupSound");
+
+      if (logo) {
+        logo.classList.add("intro");
+      }
+
+      if (navigator.vibrate) {
+        navigator.vibrate(18);
+      }
+
+      if (!sound) return;
+
+      sound.volume = 0.45;
+
+      const playSound = () => {
+        sound.currentTime = 0;
+        sound.play().catch(() => {});
+        document.removeEventListener("pointerdown", playSound);
+      };
+
+      sound.play().catch(() => {
+        document.addEventListener("pointerdown", playSound, { once:true });
+      });
+    });
+  </script>
 </body>
 </html>
