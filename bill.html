@@ -6,7 +6,89 @@
 <title>Bill Splitter</title>
 
 <style>
-  
+html,body{
+  margin:0;
+  min-height:100%;
+}
+
+body{
+  display:grid;
+  place-items:center;
+  font-family:system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif;
+  background:radial-gradient(circle at top,#1b1b1b,#070707 60%);
+  color:#f5f5f5;
+}
+
+.wrap{
+  width:min(520px,92vw);
+  padding:28px 22px;
+  text-align:center;
+}
+
+.logo{
+  width:110px;
+  height:110px;
+  border-radius:50%;
+  object-fit:cover;
+  margin-bottom:16px;
+  box-shadow:0 0 35px rgba(95,215,255,.35);
+}
+
+.title{
+  font-size:13px;
+  letter-spacing:.2em;
+  opacity:.5;
+  font-weight:900;
+  margin-bottom:8px;
+}
+
+h1{
+  margin:0 0 22px;
+  font-size:clamp(30px,7vw,44px);
+  font-weight:950;
+  letter-spacing:-.05em;
+}
+
+.card{
+  background:linear-gradient(180deg,#151515,#0d0d0d);
+  border:1px solid #252525;
+  border-radius:30px;
+  padding:24px;
+  box-shadow:0 24px 80px rgba(0,0,0,.55);
+}
+
+label{
+  display:block;
+  text-align:left;
+  margin:14px 0 8px;
+  font-size:14px;
+  font-weight:800;
+  opacity:.72;
+}
+
+input{
+  width:100%;
+  box-sizing:border-box;
+  padding:16px;
+  border-radius:20px;
+  border:1px solid #2c2c2c;
+  background:#090909;
+  color:white;
+  font-size:22px;
+  outline:none;
+}
+
+input:focus{
+  border-color:#5fd7ff;
+  box-shadow:0 0 0 3px rgba(95,215,255,.18);
+}
+
+.row{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:12px;
+}
+
 .names{
   margin-top:18px;
   display:grid;
@@ -16,621 +98,285 @@
 .nameInput{
   font-size:18px;
   padding:14px 16px;
-}  
-
-html,body{
-margin:0;
-min-height:100%;
-}
-
-body{
-display:grid;
-place-items:center;
-font-family:system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif;
-background:radial-gradient(circle at top,#1b1b1b,#070707 60%);
-color:#f5f5f5;
-}
-
-.wrap{
-width:min(520px,92vw);
-padding:28px 22px;
-text-align:center;
-}
-
-.logo{
-width:110px;
-height:110px;
-border-radius:50%;
-object-fit:cover;
-margin-bottom:16px;
-box-shadow:0 0 35px rgba(95,215,255,.35);
-}
-
-.title{
-font-size:13px;
-letter-spacing:.2em;
-opacity:.5;
-font-weight:900;
-margin-bottom:8px;
-}
-
-h1{
-margin:0 0 22px;
-font-size:clamp(30px,7vw,44px);
-font-weight:950;
-letter-spacing:-.05em;
-}
-
-.card{
-background:linear-gradient(180deg,#151515,#0d0d0d);
-border:1px solid #252525;
-border-radius:30px;
-padding:24px;
-box-shadow:0 24px 80px rgba(0,0,0,.55);
-}
-
-label{
-display:block;
-text-align:left;
-margin:14px 0 8px;
-font-size:14px;
-font-weight:800;
-opacity:.72;
-}
-
-input{
-width:100%;
-box-sizing:border-box;
-padding:16px;
-border-radius:20px;
-border:1px solid #2c2c2c;
-background:#090909;
-color:white;
-font-size:22px;
-outline:none;
-}
-
-input:focus{
-border-color:#5fd7ff;
-box-shadow:0 0 0 3px rgba(95,215,255,.18);
-}
-
-.row{
-display:grid;
-grid-template-columns:1fr 1fr;
-gap:12px;
 }
 
 .tips{
-display:grid;
-grid-template-columns:repeat(5,1fr);
-gap:8px;
-margin-top:14px;
+  display:grid;
+  grid-template-columns:repeat(5,1fr);
+  gap:8px;
+  margin-top:14px;
 }
 
 .tip{
-background:#090909;
-border:1px solid #2b2b2b;
-border-radius:15px;
-padding:12px;
-font-weight:900;
-color:white;
-cursor:pointer;
-transition:.15s;
+  background:#090909;
+  border:1px solid #2b2b2b;
+  border-radius:15px;
+  padding:12px 6px;
+  font-weight:900;
+  color:white;
+  cursor:pointer;
 }
 
 .tip.active{
-border-color:#5fd7ff;
-box-shadow:0 0 18px rgba(95,215,255,.25);
-color:#5fd7ff;
+  border-color:#5fd7ff;
+  box-shadow:0 0 18px rgba(95,215,255,.25);
+  color:#5fd7ff;
 }
 
-.roundBox{
-margin-top:18px;
-display:flex;
-align-items:center;
-justify-content:center;
-gap:10px;
-font-size:16px;
-font-weight:700;
+  .results{
+  margin-top:22px;
+  background:#090909;
+  border:1px solid #2b2b2b;
+  border-radius:22px;
+  padding:18px;
 }
 
-.roundBox input{
-width:22px;
-height:22px;
-accent-color:#5fd7ff;
+.resultLabel{
+  font-size:14px;
+  opacity:.55;
+  margin-bottom:8px;
+  font-weight:800;
 }
 
-.summary{
-
-margin-top:22px;
-
-background:#090909;
-
-border:1px solid #252525;
-
-border-radius:24px;
-
-padding:20px;
-
+.resultAmount{
+  font-size:44px;
+  font-weight:950;
+  letter-spacing:-.04em;
+  color:#5fd7ff;
+  text-shadow:0 0 22px rgba(95,215,255,.25);
 }
 
-.line{
-
-display:flex;
-
-justify-content:space-between;
-
-margin:10px 0;
-
-opacity:.72;
-
-font-size:16px;
-
+.resultEach{
+  margin-top:12px;
+  font-size:17px;
+  opacity:.75;
 }
 
-.each{
-
-margin-top:20px;
-
-padding-top:20px;
-
-border-top:1px solid #252525;
-
+.options{
+  display:grid;
+  gap:12px;
+  margin-top:22px;
 }
 
-.eachLabel{
-
-font-size:14px;
-
-opacity:.55;
-
-letter-spacing:.15em;
-
-font-weight:900;
-
+.btn{
+  width:100%;
+  border:0;
+  border-radius:22px;
+  padding:18px;
+  font-size:20px;
+  font-weight:900;
+  cursor:pointer;
+  transition:.18s ease;
 }
 
-.eachValue{
-
-font-size:clamp(44px,12vw,72px);
-
-font-weight:950;
-
-margin-top:8px;
-
-text-shadow:0 0 26px rgba(95,215,255,.45);
-
-transition:.2s;
-
+.btn:active{
+  transform:scale(.98);
 }
 
-.eachValue.pop{
-
-animation:pop .25s;
-
+.primary{
+  background:#5fd7ff;
+  color:#08131a;
 }
 
-@keyframes pop{
-
-0%{transform:scale(.9);}
-
-50%{transform:scale(1.08);}
-
-100%{transform:scale(1);}
-
-}
-
-.buttons{
-
-display:grid;
-
-grid-template-columns:1fr 1fr;
-
-gap:12px;
-
-margin-top:22px;
-
-}
-
-.action{
-
-border:0;
-
-border-radius:22px;
-
-padding:18px;
-
-font-size:18px;
-
-font-weight:900;
-
-cursor:pointer;
-
-transition:.15s;
-
+.secondary{
+  background:#161616;
+  color:white;
+  border:1px solid #2c2c2c;
 }
 
 .share{
-
-background:#5fd7ff;
-
-color:#071018;
-
-}
-
-.whopays{
-
-background:#151515;
-
-color:white;
-
-border:1px solid #303030;
-
-}
-
-.action:active{
-
-transform:scale(.98);
-
+  background:#0d0d0d;
+  color:white;
+  border:1px solid #2b2b2b;
 }
 
 .back{
-
-display:inline-block;
-
-margin-top:24px;
-
-text-decoration:none;
-
-color:white;
-
-opacity:.65;
-
+  display:inline-block;
+  margin-top:24px;
+  color:white;
+  opacity:.65;
+  text-decoration:none;
+  font-weight:700;
 }
+
 .overlay{
-position:fixed;
-inset:0;
-background:rgba(5,5,5,.96);
-display:grid;
-place-items:center;
-z-index:999;
-transition:.3s;
+  position:fixed;
+  inset:0;
+  background:rgba(5,5,5,.96);
+  display:grid;
+  place-items:center;
+  z-index:999;
 }
 
 .hidden{
-display:none;
+  display:none;
 }
 
-.overlay-content{
-text-align:center;
-padding:20px;
+.overlayContent{
+  text-align:center;
+  padding:30px;
 }
 
-.overlay-logo{
-width:170px;
-height:170px;
-border-radius:50%;
-box-shadow:0 0 50px rgba(95,215,255,.65);
-animation:none;
+.overlayLogo{
+  width:180px;
+  height:180px;
+  border-radius:50%;
+  box-shadow:0 0 55px rgba(95,215,255,.6);
 }
 
-.overlay-logo.spin{
-animation:spinPuck 2.8s linear infinite;
+.spin{
+  animation:spin 1s linear infinite;
 }
 
-@keyframes spinPuck{
+@keyframes spin{
+
 from{
 transform:rotate(0deg);
 }
+
 to{
 transform:rotate(360deg);
 }
+
 }
 
-.overlay-title{
-margin-top:22px;
-font-size:16px;
-letter-spacing:.2em;
-opacity:.65;
-font-weight:900;
+.overlayTitle{
+  margin-top:22px;
+  font-size:15px;
+  letter-spacing:.22em;
+  opacity:.6;
+  font-weight:900;
 }
 
-.overlay-name{
-margin-top:26px;
-font-size:48px;
-font-weight:950;
-min-height:60px;
+.overlayName{
+  margin-top:34px;
+  min-height:56px;
+  font-size:48px;
+  font-weight:950;
 }
 
-.overlay-result{
-margin-top:30px;
-font-size:56px;
-font-weight:950;
-color:#5fd7ff;
-text-shadow:0 0 28px rgba(95,215,255,.55);
+.overlayResult{
+  margin-top:26px;
+  font-size:56px;
+  font-weight:950;
+  color:#5fd7ff;
+  text-shadow:0 0 30px rgba(95,215,255,.45);
 }
+
 </style>
 </head>
 
-<body>
+  <body>
 
 <div class="wrap">
+  <img src="./logo.png" class="logo" alt="PucKnows logo">
 
-<img src="./logo.png" class="logo">
+  <div class="title">PUCKNOWS BILL SPLITTER</div>
+  <h1>Split the damage</h1>
 
-<div class="title">
+  <div class="card">
+    <label for="bill">💰 Total bill</label>
+    <input id="bill" inputmode="decimal" value="100">
 
-PUCKNOWS BILL SPLITTER
+    <div class="row">
+      <div>
+        <label for="people">👥 People</label>
+        <input id="people" inputmode="numeric" value="2">
+      </div>
 
-</div>
+      <div>
+        <label for="tip">🎁 Tip %</label>
+        <input id="tip" inputmode="decimal" value="15">
+      </div>
+    </div>
 
-<h1>
+    <div class="names" id="names"></div>
 
-Split the damage
+    <div class="tips">
+      <button class="tip" data-tip="0">0%</button>
+      <button class="tip" data-tip="10">10%</button>
+      <button class="tip active" data-tip="15">15%</button>
+      <button class="tip" data-tip="20">20%</button>
+      <button class="tip" data-tip="25">25%</button>
+    </div>
 
-</h1>
+    <div class="options">
+      <button class="btn secondary" id="roundBtn">💰 Round each share: OFF</button>
+    </div>
 
-<div class="card">
+    <div class="results">
+      <div class="resultLabel">EACH PERSON PAYS</div>
+      <div class="resultAmount" id="eachAmount">$57.50</div>
+      <div class="resultEach" id="summaryText">Bill $100.00 · Tip $15.00 · Total $115.00</div>
+    </div>
 
-<label>Total Bill</label>
-
-<input id="bill" value="100">
-
-<div class="row">
-
-<div>
-
-<label>People</label>
-
-<input id="people" value="4">
-
-</div>
-
-<div>
-
-<label>Tip %</label>
-
-<input id="tip" value="15">
-
-</div>
-
-</div>
-  
-<div class="names" id="names"></div>
-  
-<div class="tips">
-  
-
-<button class="tip">0%</button>
-
-<button class="tip">10%</button>
-
-<button class="tip active">15%</button>
-
-<button class="tip">20%</button>
-
-<button class="tip">25%</button>
-
-</div>
-
-<div class="roundBox">
-
-<input type="checkbox" id="roundUp">
-
-<label for="roundUp" style="margin:0;">
-💰 Round each share up
-</label>
-
-</div>
-<div class="summary">
-  <div class="line">
-    <span>Bill</span>
-    <strong id="billAmount">$100.00</strong>
+    <div class="options">
+      <button class="btn share" id="shareBtn">📤 Share result</button>
+      <button class="btn primary" id="whoBtn">🎉 Who pays?</button>
+    </div>
   </div>
 
-  <div class="line">
-    <span>Tip</span>
-    <strong id="tipAmount">$15.00</strong>
-  </div>
-
-  <div class="line">
-    <span>Total</span>
-    <strong id="totalAmount">$115.00</strong>
-  </div>
-
-  <div class="each">
-    <div class="eachLabel">EACH PERSON PAYS</div>
-    <div class="eachValue" id="eachPerson">$28.75</div>
-  </div>
-</div>
-
-<div class="buttons">
-  <button class="action share" id="shareBtn">📤 Share</button>
-  <button class="action whopays" id="whoBtn">🎉 Who Pays?</button>
-</div>
-
-<div class="back">
   <a class="back" href="./index.html">← Back</a>
 </div>
-<script>
 
-const bill=document.getElementById("bill");
-const people=document.getElementById("people");
-const tip=document.getElementById("tip");
-const round=document.getElementById("roundUp");
+<div id="whoOverlay" class="overlay hidden">
+  <div class="overlayContent">
+    <img src="./logo.png" class="overlayLogo" id="overlayLogo" alt="PucKnows logo">
 
-const billAmount=document.getElementById("billAmount");
-const tipAmount=document.getElementById("tipAmount");
-const totalAmount=document.getElementById("totalAmount");
-const eachPerson=document.getElementById("eachPerson");
+    <div class="overlayTitle">CONSULTING THE PUCK...</div>
+    <div class="overlayName" id="overlayName">Person 1</div>
+    <div class="overlayResult" id="overlayResult"></div>
+  </div>
+</div>
 
-const shareBtn=document.getElementById("shareBtn");
-const whoBtn=document.getElementById("whoBtn");
+  <script>
+const billInput = document.getElementById("bill");
+const peopleInput = document.getElementById("people");
+const tipInput = document.getElementById("tip");
 
-const tipButtons=document.querySelectorAll(".tip");
-
-function money(v){
-    return "$"+v.toFixed(2);
-}
-
-function animateResult(){
-    eachPerson.classList.remove("pop");
-    void eachPerson.offsetWidth;
-    eachPerson.classList.add("pop");
-}
-
-function calculate(){
-
-    let b=parseFloat(bill.value);
-    let p=parseInt(people.value);
-    let t=parseFloat(tip.value);
-
-    if(isNaN(b)||b<0)b=0;
-    if(isNaN(p)||p<1)p=1;
-    if(isNaN(t)||t<0)t=0;
-
-    const tipValue=b*(t/100);
-
-    const total=b+tipValue;
-
-    let each=total/p;
-
-    if(round.checked){
-        each=Math.ceil(each);
-    }
-
-    billAmount.textContent=money(b);
-    tipAmount.textContent=money(tipValue);
-    totalAmount.textContent=money(total);
-    eachPerson.textContent=money(each);
-
-    animateResult();
-
-    tipButtons.forEach(btn=>{
-        btn.classList.toggle(
-            "active",
-            parseFloat(btn.textContent)==t
-        );
-    });
-
-}
-
-[bill,people,tip].forEach(el=>{
-    el.addEventListener("input",calculate);
-});
-
-round.addEventListener("change",calculate);
-
-tipButtons.forEach(btn=>{
-
-    btn.onclick=()=>{
-
-        tip.value=parseFloat(btn.textContent);
-
-        calculate();
-
-        if(navigator.vibrate){
-            navigator.vibrate(10);
-        }
-
-    };
-
-});
-
-shareBtn.onclick=async()=>{
-
-    const text=
-`Bill: ${billAmount.textContent}
-Tip: ${tipAmount.textContent}
-Total: ${totalAmount.textContent}
-
-Each person pays ${eachPerson.textContent}
-
-Calculated with PucKnows`;
-
-    if(navigator.share){
-
-        try{
-
-            await navigator.share({
-                title:"Bill Split",
-                text:text
-            });
-
-        }catch{}
-
-    }else{
-
-        navigator.clipboard.writeText(text);
-
-        alert("Copied to clipboard.");
-
-    }
-
-};
-
-whoBtn.onclick = () => {
-
-    let p = parseInt(people.value);
-
-    if (isNaN(p) || p < 1) p = 1;
-
-    const names = getNames();
-
-  const overlay = document.getElementById("whoOverlay");
-  const overlayLogo = document.getElementById("overlayLogo");
-  const overlayName = document.getElementById("overlayName");
-  const overlayResult = document.getElementById("overlayResult");
-
-  overlay.classList.remove("hidden");
-  overlayLogo.classList.add("spin");
-  overlayResult.textContent = "";
-  overlayName.textContent = "Consulting...";
-
-  let count = 0;
-
-  const interval = setInterval(() => {
-    count++;
-
-    const randomName = names[Math.floor(Math.random() * names.length)];
-    overlayName.textContent = randomName;
-
-    if (navigator.vibrate) {
-      navigator.vibrate(8);
-    }
-
-    if (count > 28) {
-      clearInterval(interval);
-
-      const winner = names[Math.floor(Math.random() * names.length)];
-
-      overlayLogo.classList.remove("spin");
-      overlayName.textContent = "";
-      overlayResult.textContent = "🎉 " + winner + " pays!";
-
-      if (navigator.vibrate) {
-        navigator.vibrate([40, 30, 90]);
-      }
-
-      overlay.onclick = () => {
-        overlay.classList.add("hidden");
-        overlay.onclick = null;
-    }
-  }, 90);
-};
 const namesBox = document.getElementById("names");
+const eachAmount = document.getElementById("eachAmount");
+const summaryText = document.getElementById("summaryText");
+
+const roundBtn = document.getElementById("roundBtn");
+const shareBtn = document.getElementById("shareBtn");
+const whoBtn = document.getElementById("whoBtn");
+
+const tipButtons = document.querySelectorAll(".tip");
+
+const overlay = document.getElementById("whoOverlay");
+const overlayLogo = document.getElementById("overlayLogo");
+const overlayName = document.getElementById("overlayName");
+const overlayResult = document.getElementById("overlayResult");
+
+let roundUp = false;
+let currentEach = 0;
+let currentTotal = 0;
+let currentTip = 0;
+
+function money(value){
+  return "$" + value.toFixed(2);
+}
+
+function num(value){
+  const n = parseFloat(value);
+  return Number.isFinite(n) ? n : 0;
+}
+
+function peopleCount(){
+  const p = parseInt(peopleInput.value, 10);
+  return Number.isFinite(p) && p > 0 ? p : 1;
+}
 
 function buildNameInputs(){
-  let p = parseInt(people.value);
-  if(isNaN(p) || p < 1) p = 1;
+  const count = peopleCount();
 
   const existing = Array.from(document.querySelectorAll(".nameInput"))
     .map(input => input.value);
 
   namesBox.innerHTML = "";
 
-  for(let i = 0; i < p; i++){
+  for(let i = 0; i < count; i++){
     const input = document.createElement("input");
     input.className = "nameInput";
     input.placeholder = "Name " + (i + 1);
@@ -640,37 +386,153 @@ function buildNameInputs(){
 }
 
 function getNames(){
-  return Array.from(document.querySelectorAll(".nameInput")).map((input, i) => {
-    return input.value.trim() || "Person " + (i + 1);
+  return Array.from(document.querySelectorAll(".nameInput")).map((input, index) => {
+    return input.value.trim() || "Person " + (index + 1);
   });
 }
 
-people.addEventListener("input", buildNameInputs);
+function popResult(){
+  eachAmount.style.transform = "scale(1.06)";
+  setTimeout(() => {
+    eachAmount.style.transform = "scale(1)";
+  }, 140);
+}
+
+function calculate(){
+  const bill = Math.max(0, num(billInput.value));
+  const tipPercent = Math.max(0, num(tipInput.value));
+  const people = peopleCount();
+
+  currentTip = bill * (tipPercent / 100);
+  currentTotal = bill + currentTip;
+  currentEach = currentTotal / people;
+
+  if(roundUp){
+    currentEach = Math.ceil(currentEach);
+  }
+
+  eachAmount.textContent = money(currentEach);
+  summaryText.textContent =
+    "Bill " + money(bill) +
+    " · Tip " + money(currentTip) +
+    " · Total " + money(currentTotal);
+
+  tipButtons.forEach(button => {
+    button.classList.toggle(
+      "active",
+      parseFloat(button.dataset.tip) === tipPercent
+    );
+  });
+
+  popResult();
+}
+
+billInput.addEventListener("input", calculate);
+tipInput.addEventListener("input", calculate);
+
+peopleInput.addEventListener("input", () => {
+  buildNameInputs();
+  calculate();
+});
+
+tipButtons.forEach(button => {
+  button.addEventListener("click", () => {
+    tipInput.value = button.dataset.tip;
+    calculate();
+
+    if(navigator.vibrate){
+      navigator.vibrate(10);
+    }
+  });
+});
+
+roundBtn.addEventListener("click", () => {
+  roundUp = !roundUp;
+  roundBtn.textContent = roundUp
+    ? "💰 Round each share: ON"
+    : "💰 Round each share: OFF";
+
+  roundBtn.style.borderColor = roundUp ? "#5fd7ff" : "#2c2c2c";
+
+  calculate();
+
+  if(navigator.vibrate){
+    navigator.vibrate(12);
+  }
+});
+
+shareBtn.addEventListener("click", async () => {
+  const text =
+    "PucKnows Bill Split\n\n" +
+    summaryText.textContent + "\n" +
+    "Each person pays " + eachAmount.textContent;
+
+  if(navigator.share){
+    try{
+      await navigator.share({
+        title:"PucKnows Bill Split",
+        text:text
+      });
+    } catch {}
+  } else {
+    try{
+      await navigator.clipboard.writeText(text);
+      alert("Copied to clipboard");
+    } catch {
+      alert(text);
+    }
+  }
+});
+
+whoBtn.addEventListener("click", () => {
+  const names = getNames();
+
+  overlay.classList.remove("hidden");
+  overlayLogo.classList.add("spin");
+  overlayName.textContent = "Consulting...";
+  overlayResult.textContent = "";
+
+  let count = 0;
+  let delay = 70;
+
+  function cycle(){
+    const randomName = names[Math.floor(Math.random() * names.length)];
+    overlayName.textContent = randomName;
+
+    if(navigator.vibrate){
+      navigator.vibrate(8);
+    }
+
+    count++;
+    delay += 8;
+
+    if(count < 30){
+      setTimeout(cycle, delay);
+      return;
+    }
+
+    const winner = names[Math.floor(Math.random() * names.length)];
+
+    overlayLogo.classList.remove("spin");
+    overlayName.textContent = "";
+    overlayResult.textContent = "🎉 " + winner + " pays!";
+
+    if(navigator.vibrate){
+      navigator.vibrate([40,30,90]);
+    }
+  }
+
+  cycle();
+});
+
+overlay.addEventListener("click", () => {
+  overlay.classList.add("hidden");
+  overlayLogo.classList.remove("spin");
+});
 
 buildNameInputs();
 calculate();
-
 </script>
 
-  <div id="whoOverlay" class="overlay hidden">
-
-  <div class="overlay-content">
-
-    <img src="./logo.png" class="overlay-logo" id="overlayLogo">
-
-    <div class="overlay-title">
-      CONSULTING THE PUCK...
-    </div>
-
-    <div class="overlay-name" id="overlayName">
-      Person 1
-    </div>
-
-    <div class="overlay-result" id="overlayResult"></div>
-
-  </div>
-
-  </div>
-  
 </body>
 </html>
