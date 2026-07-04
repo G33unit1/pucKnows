@@ -570,11 +570,13 @@ Calculated with PucKnows`;
 
 };
 
-let p = parseInt(people.value);
+whoBtn.onclick = () => {
 
-if (isNaN(p) || p < 1) p = 1;
+    let p = parseInt(people.value);
 
-const names = getNames();
+    if (isNaN(p) || p < 1) p = 1;
+
+    const names = getNames();
 
   const overlay = document.getElementById("whoOverlay");
   const overlayLogo = document.getElementById("overlayLogo");
@@ -614,7 +616,6 @@ const names = getNames();
       overlay.onclick = () => {
         overlay.classList.add("hidden");
         overlay.onclick = null;
-      };
     }
   }, 90);
 };
