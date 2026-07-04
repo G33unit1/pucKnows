@@ -12,7 +12,7 @@
       display:grid;
       place-items:center;
       font-family:system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif;
-      background:#08090c;
+      background:radial-gradient(circle at top,#1b1b1b,#070707 60%);
       color:#f5f5f5;
     }
 
@@ -24,16 +24,17 @@
 
     h1{
       margin:0 0 24px;
-      font-size:clamp(26px,6vw,38px);
-      font-weight:850;
+      font-size:clamp(28px,7vw,44px);
+      font-weight:950;
+      letter-spacing:-.05em;
     }
 
     .card{
       background:linear-gradient(180deg,#151515,#0f0f0f);
       border:1px solid #242424;
-      border-radius:28px;
+      border-radius:30px;
       padding:24px;
-      box-shadow:0 24px 80px rgba(0,0,0,.45);
+      box-shadow:0 24px 80px rgba(0,0,0,.55);
     }
 
     label{
@@ -42,6 +43,7 @@
       font-size:16px;
       opacity:.7;
       margin:14px 0 8px;
+      font-weight:750;
     }
 
     input{
@@ -96,31 +98,33 @@
     }
 
     .puck{
-      position:relative;
       width:100%;
       height:100%;
       border-radius:50%;
-      background:
-        radial-gradient(circle at 35% 25%, rgba(255,255,255,.16), transparent 22%),
-        conic-gradient(
-          #202020 0deg 45deg,
-          #f2f2f2 45deg 90deg,
-          #202020 90deg 135deg,
-          #f2f2f2 135deg 180deg,
-          #202020 180deg 225deg,
-          #f2f2f2 225deg 270deg,
-          #202020 270deg 315deg,
-          #f2f2f2 315deg 360deg
-        );
-      border:10px solid #222;
+      position:relative;
+      display:grid;
+      place-items:center;
+      overflow:hidden;
+      background:#050505;
+      border:8px solid #222;
       box-shadow:
         inset 0 0 25px rgba(255,255,255,.08),
         inset 0 0 60px rgba(0,0,0,.5),
         0 0 0 2px #333,
         0 24px 60px rgba(0,0,0,.75);
-      display:grid;
-      place-items:center;
-      transition:transform 3.6s cubic-bezier(.08,.82,.18,1), filter .3s;
+      transition:
+        transform 3.6s cubic-bezier(.08,.82,.18,1),
+        box-shadow .3s,
+        filter .3s;
+    }
+
+    .puck::after{
+      content:"";
+      position:absolute;
+      inset:0;
+      border-radius:50%;
+      background:radial-gradient(circle at 35% 22%, rgba(255,255,255,.18), transparent 28%);
+      pointer-events:none;
     }
 
     .puck.spinning{
@@ -128,46 +132,16 @@
         inset 0 0 25px rgba(255,255,255,.08),
         inset 0 0 60px rgba(0,0,0,.5),
         0 0 0 2px #333,
-        0 0 35px rgba(95,215,255,.55),
+        0 0 42px rgba(95,215,255,.75),
         0 24px 70px rgba(0,0,0,.85);
-      filter:blur(.2px);
+      filter:blur(.15px);
     }
 
-    .centre{
-      position:absolute;
-      width:112px;
-      height:112px;
-      border-radius:50%;
-      background:
-        radial-gradient(circle at 35% 25%, #1b1b1b, #050505 70%);
-      border:1px solid #303030;
-      display:grid;
-      place-items:center;
-      box-shadow:
-        inset 0 0 20px rgba(255,255,255,.06),
-        0 12px 26px rgba(0,0,0,.7);
-      z-index:3;
-    }
-
-    .centre.win{
-      animation:winPop .45s ease;
-      box-shadow:
-        inset 0 0 20px rgba(255,255,255,.08),
-        0 0 34px rgba(95,215,255,.75),
-        0 12px 26px rgba(0,0,0,.7);
-    }
-
-    @keyframes winPop{
-      0%{ transform:scale(1); }
-      45%{ transform:scale(1.14); }
-      100%{ transform:scale(1); }
-    }
-
-    .wheel-number{
-      font-size:48px;
-      font-weight:950;
-      color:#fff;
-      text-shadow:0 0 18px rgba(255,255,255,.2);
+    .puck-logo{
+      width:100%;
+      height:100%;
+      object-fit:cover;
+      transform:scale(1.08);
     }
 
     .btn{
@@ -190,9 +164,23 @@
 
     .out{
       margin-top:24px;
-      font-size:clamp(34px,9vw,54px);
+      font-size:clamp(42px,12vw,72px);
       font-weight:950;
-      min-height:62px;
+      min-height:82px;
+      opacity:1;
+      transform:scale(1);
+      transition:.35s ease;
+    }
+
+    .out.win{
+      animation:winPop .45s ease;
+      text-shadow:0 0 34px rgba(95,215,255,.75);
+    }
+
+    @keyframes winPop{
+      0%{ transform:scale(.85); opacity:.4; }
+      45%{ transform:scale(1.16); opacity:1; }
+      100%{ transform:scale(1); opacity:1; }
     }
 
     .hint{
@@ -227,9 +215,7 @@
         <div class="pointer" id="pointer"></div>
 
         <div class="puck" id="puck">
-          <div class="centre" id="centre">
-            <div class="wheel-number" id="wheelNumber">?</div>
-          </div>
+          <img class="puck-logo" src="./logo.png" alt="PucKnows logo">
         </div>
       </div>
 
@@ -256,10 +242,12 @@
         const arr = new Uint32Array(1);
         const maxUnbiased = Math.floor(0xFFFFFFFF / range) * range - 1;
         let x;
+
         do {
           crypto.getRandomValues(arr);
           x = arr[0];
         } while (x > maxUnbiased);
+
         return min + (x % range);
       }
 
@@ -269,9 +257,7 @@
     const out = document.getElementById("out");
     const go = document.getElementById("go");
     const puck = document.getElementById("puck");
-    const centre = document.getElementById("centre");
     const pointer = document.getElementById("pointer");
-    const wheelNumber = document.getElementById("wheelNumber");
 
     let currentRotation = 0;
     let numberTimer = null;
@@ -304,15 +290,15 @@
 
         go.disabled = true;
         go.textContent = "SPINNING...";
+        out.classList.remove("win");
         out.textContent = "Spinning...";
-        centre.classList.remove("win");
         puck.classList.add("spinning");
 
         clearInterval(numberTimer);
         clearInterval(tickTimer);
 
         numberTimer = setInterval(() => {
-          wheelNumber.textContent = randInt(min, max);
+          out.textContent = randInt(min, max);
         }, 65);
 
         tickTimer = setInterval(tickPointer, 130);
@@ -327,11 +313,10 @@
           clearInterval(numberTimer);
           clearInterval(tickTimer);
 
-          wheelNumber.textContent = finalNumber;
           out.textContent = finalNumber;
+          out.classList.add("win");
 
           puck.classList.remove("spinning");
-          centre.classList.add("win");
 
           go.disabled = false;
           go.textContent = "🎲 SPIN THE PUCK";
