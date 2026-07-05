@@ -517,6 +517,8 @@ whoBtn.addEventListener("click", () => {
     overlayName.textContent = "";
     overlayResult.textContent = "🎉 " + winner + " pays!";
 
+    document.getElementById("resultSound").play();
+
     if(navigator.vibrate){
       navigator.vibrate([40,30,90]);
     }
@@ -532,7 +534,10 @@ overlay.addEventListener("click", () => {
 
 buildNameInputs();
 calculate();
+
 </script>
+    
+<audio id="resultSound" src="ding.mp3" preload="auto"></audio>    
 
 </body>
 </html>
