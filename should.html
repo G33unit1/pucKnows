@@ -200,6 +200,14 @@
 
       statusEl.textContent = isDo ? "✅ PucKnows says..." : "❌ PucKnows says...";
       answerEl.textContent = text;
+
+const sound = document.getElementById("resultSound");
+if (sound) {
+    sound.currentTime = 0;
+    sound.play().catch(() => {});
+}
+
+answerEl.classList.add("show", isDo ? "do" : "dont");
       answerEl.classList.add("show", isDo ? "do" : "dont");
 
       if (navigator.vibrate && !instant) {
@@ -239,5 +247,8 @@
       }, THINK_MS);
     }
   </script>
+  
+<audio id="resultSound" src="ding.mp3" preload="auto"></audio>
+  
 </body>
 </html>
