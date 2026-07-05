@@ -343,8 +343,14 @@
         lastNumbers = sampleUnique(min, max, k);
         renderBalls(lastNumbers);
 
-        setBusy(false);
-        copyBtn.disabled = false;
+        const sound = document.getElementById("resultSound");
+        if (sound) {
+            sound.currentTime = 0;
+            sound.play().catch(() => {});
+}
+
+setBusy(false);
+copyBtn.disabled = false;
 
         if (navigator.vibrate) navigator.vibrate([30, 30, 70]);
       }
@@ -383,5 +389,8 @@
       document.body.removeChild(ta);
     });
   </script>
+
+  <audio id="resultSound" src="ding.mp3" preload="auto"></audio>
+  
 </body>
 </html>
