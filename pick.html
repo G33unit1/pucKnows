@@ -239,6 +239,13 @@
 
       statusEl.textContent = "🏆 PucKnows chose";
       answerEl.textContent = result;
+
+const sound = document.getElementById("resultSound");
+if (sound) {
+    sound.currentTime = 0;
+    sound.play().catch(() => {});
+}
+
       highlightWinner(result);
 
       setTimeout(() => {
@@ -286,5 +293,8 @@
       }, THINK_MS + 2300);
     }
   </script>
+  
+  <audio id="resultSound" src="ding.mp3" preload="auto"></audio>
+  
 </body>
 </html>
