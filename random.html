@@ -315,6 +315,12 @@
 
           out.textContent = finalNumber;
           out.classList.add("win");
+  
+const sound = document.getElementById("resultSound");
+if (sound) {
+    sound.currentTime = 0;
+    sound.play().catch(() => {});
+}
 
           puck.classList.remove("spinning");
 
@@ -331,5 +337,8 @@
       }
     });
   </script>
+  
+  <audio id="resultSound" src="ding.mp3" preload="auto"></audio>
+  
 </body>
 </html>
