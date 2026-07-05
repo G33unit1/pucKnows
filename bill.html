@@ -517,7 +517,12 @@ whoBtn.addEventListener("click", () => {
     overlayName.textContent = "";
     overlayResult.textContent = "🎉 " + winner + " pays!";
 
-    document.getElementById("resultSound").play();
+    const sound = document.getElementById("resultSound");
+
+if (sound) {
+    sound.currentTime = 0;
+    sound.play().catch(err => console.log(err));
+}
 
     if(navigator.vibrate){
       navigator.vibrate([40,30,90]);
