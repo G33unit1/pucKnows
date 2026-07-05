@@ -210,6 +210,13 @@
     form.addEventListener("submit", (e) => {
       e.preventDefault();
 
+      const sound = document.getElementById("resultSound");
+if (sound) {
+    sound.play().then(() => {
+        sound.pause();
+        sound.currentTime = 0;
+    }).catch(() => {});
+}
       const a = clean(inputA.value, "Option A");
       const b = clean(inputB.value, "Option B");
 
@@ -224,5 +231,6 @@
       }, 220);
     });
   </script>
+  <audio id="resultSound" src="ding.mp3" preload="auto"></audio>
 </body>
 </html>
