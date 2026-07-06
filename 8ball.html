@@ -6,25 +6,14 @@
 <title>Ask PucKnows</title>
 <link rel="icon" href="logo.png">
 <link rel="apple-touch-icon" href="logo.png">
-<style>
-/* =========================================================
-   PucKnows - Ask PucKnows / 8 Ball
-   Single-file premium mobile page
-   HTML + CSS + Vanilla JS only
-========================================================= */
 
+<style>
 :root{
     --bg:#05070d;
-    --bg2:#090d18;
-    --card:rgba(12,18,32,.86);
-    --card2:rgba(17,25,43,.92);
     --text:#eef6ff;
     --muted:#8da0bc;
     --blue:#35b7ff;
-    --blue2:#0077ff;
     --purple:#9a62ff;
-    --danger:#ff4f8b;
-    --good:#42f5c8;
     --gold:#ffd36a;
     --border:rgba(110,190,255,.18);
     --shadow:0 30px 80px rgba(0,0,0,.55);
@@ -39,7 +28,7 @@ html,body{
     background:
         radial-gradient(circle at 50% -10%, rgba(50,140,255,.22), transparent 34%),
         radial-gradient(circle at 85% 18%, rgba(139,73,255,.14), transparent 24%),
-        linear-gradient(180deg,var(--bg),#03040a 70%,#010208);
+        linear-gradient(180deg,#05070d,#03040a 70%,#010208);
     color:var(--text);
     overflow-x:hidden;
 }
@@ -60,7 +49,7 @@ body::before{
     width:min(460px,100%);
     min-height:100svh;
     margin:0 auto;
-    padding:22px 18px max(24px, env(safe-area-inset-bottom));
+    padding:20px 18px max(24px, env(safe-area-inset-bottom));
     display:flex;
     flex-direction:column;
     align-items:center;
@@ -71,7 +60,7 @@ body::before{
     display:flex;
     align-items:center;
     justify-content:space-between;
-    margin-bottom:8px;
+    margin-bottom:6px;
 }
 
 .home-link{
@@ -82,7 +71,6 @@ body::before{
     background:rgba(255,255,255,.04);
     border-radius:999px;
     padding:9px 12px;
-    backdrop-filter:blur(10px);
 }
 
 .pill{
@@ -94,10 +82,7 @@ body::before{
     padding:8px 11px;
 }
 
-header{
-    text-align:center;
-    margin:8px 0 18px;
-}
+header{text-align:center;margin:4px 0 10px}
 
 h1{
     margin:0;
@@ -108,17 +93,17 @@ h1{
 
 .subtitle{
     margin:8px auto 0;
-    max-width:340px;
+    max-width:350px;
     color:var(--muted);
     line-height:1.35;
     font-size:14px;
 }
 
-/* Ball stage */
+/* Main ball */
 .stage{
     position:relative;
     width:100%;
-    height:310px;
+    height:300px;
     display:grid;
     place-items:center;
     margin:0 0 14px;
@@ -126,7 +111,7 @@ h1{
 
 .ball-wrap{
     position:relative;
-    width:min(280px,75vw);
+    width:min(285px,76vw);
     aspect-ratio:1;
     display:grid;
     place-items:center;
@@ -149,8 +134,7 @@ h1{
         0 0 36px rgba(53,183,255,.38),
         0 0 var(--glowSize,72px) rgba(53,183,255,.22);
     border:1px solid rgba(255,255,255,.08);
-    transform-style:preserve-3d;
-    transition:box-shadow .35s ease, transform .35s ease;
+    transition:.35s ease;
 }
 
 .ball::before{
@@ -163,7 +147,6 @@ h1{
         radial-gradient(ellipse at 28% 20%, rgba(255,255,255,.18), transparent 28%),
         radial-gradient(ellipse at 68% 72%, rgba(53,183,255,.14), transparent 32%);
     opacity:.64;
-    pointer-events:none;
 }
 
 .ball::after{
@@ -190,35 +173,39 @@ h1{
     animation:shadowPulse 4.8s ease-in-out infinite;
 }
 
+/* Larger triangle so text is not blocked */
 .triangle{
     position:absolute;
-    width:56%;
-    height:46%;
-    top:50%;
+    width:66%;
+    height:54%;
+    top:51%;
     left:50%;
     transform:translate(-50%,-45%);
     display:grid;
     place-items:center;
-    clip-path:polygon(50% 100%, 4% 8%, 96% 8%);
+    clip-path:polygon(50% 100%, 3% 7%, 97% 7%);
     background:
-        radial-gradient(circle at 50% 34%, rgba(105,220,255,.8), rgba(28,122,255,.75) 40%, rgba(5,26,69,.9) 100%);
-    box-shadow:0 0 36px rgba(53,183,255,.72);
+        radial-gradient(circle at 50% 34%, rgba(105,230,255,.92), rgba(28,122,255,.82) 43%, rgba(5,26,69,.95) 100%);
+    box-shadow:0 0 40px rgba(53,183,255,.8);
     transition:opacity .35s ease, filter .35s ease, transform .35s ease;
 }
 
 .triangle-inner{
-    width:78%;
-    height:72%;
-    margin-top:-8%;
-    display:grid;
-    place-items:center;
+    width:76%;
+    min-height:70%;
+    margin-top:-9%;
+    display:flex;
+    align-items:center;
+    justify-content:center;
     text-align:center;
     color:#eaf8ff;
-    font-weight:800;
+    font-weight:900;
     line-height:1.05;
-    font-size:clamp(13px,4vw,18px);
-    text-shadow:0 2px 12px rgba(0,0,0,.65);
-    padding:10px;
+    font-size:clamp(12px,3.55vw,17px);
+    text-shadow:0 2px 12px rgba(0,0,0,.7);
+    padding:14px 10px 8px;
+    white-space:normal;
+    overflow:hidden;
 }
 
 .ball.thinking{
@@ -230,21 +217,21 @@ h1{
     animation:shakeBall .58s ease-in-out infinite;
 }
 
-.ball.legendary{
-    box-shadow:
-        inset -24px -32px 50px rgba(0,0,0,.92),
-        0 0 55px rgba(255,211,106,.85),
-        0 0 140px rgba(255,211,106,.42);
-}
-
 .ball.thinking .triangle{
-    opacity:.18;
+    opacity:.16;
     filter:blur(2px);
 }
 
 .ball.revealed .triangle{
     filter:brightness(1.45) saturate(1.35);
-    animation:trianglePop .8s cubic-bezier(.2,1.5,.2,1);
+    animation:trianglePop .8s cubic-bezier(.2,1.5,.2,1), trianglePulse 2.4s ease-in-out infinite;
+}
+
+.ball.legendary{
+    box-shadow:
+        inset -24px -32px 50px rgba(0,0,0,.92),
+        0 0 55px rgba(255,211,106,.85),
+        0 0 140px rgba(255,211,106,.42);
 }
 
 .loading-msg{
@@ -253,19 +240,16 @@ h1{
     margin-bottom:8px;
     color:#b5dfff;
     font-size:14px;
-    opacity:.9;
     text-align:center;
 }
 
-/* Cards and controls */
 .card{
     width:100%;
     border:1px solid var(--border);
-    background:linear-gradient(180deg,var(--card),rgba(8,12,22,.88));
+    background:linear-gradient(180deg,rgba(12,18,32,.86),rgba(8,12,22,.88));
     box-shadow:var(--shadow);
     border-radius:26px;
     padding:16px;
-    backdrop-filter:blur(16px);
 }
 
 textarea{
@@ -289,23 +273,22 @@ textarea:focus{
 
 textarea::placeholder{color:#60718c}
 
-.primary, .btn{
+.primary,.btn{
     border:0;
     font:inherit;
     font-weight:900;
-    letter-spacing:.3px;
     cursor:pointer;
     border-radius:18px;
     min-height:52px;
-    color:#03121f;
-    background:linear-gradient(135deg,#6ee7ff,var(--blue),#3385ff);
-    box-shadow:0 14px 30px rgba(53,183,255,.24);
-    transition:transform .16s ease, opacity .16s ease, filter .16s ease;
+    transition:transform .16s ease, opacity .16s ease;
 }
 
 .primary{
     width:100%;
     margin-top:12px;
+    color:#03121f;
+    background:linear-gradient(135deg,#6ee7ff,var(--blue),#3385ff);
+    box-shadow:0 14px 30px rgba(53,183,255,.24);
 }
 
 .primary:disabled{
@@ -358,12 +341,25 @@ textarea::placeholder{color:#60718c}
     transition:.2s;
 }
 
-.toggle.on .switch{
-    background:linear-gradient(135deg,var(--blue),var(--purple));
+.toggle.on .switch{background:linear-gradient(135deg,var(--blue),var(--purple))}
+.toggle.on .switch::after{left:24px}
+
+.answer-panel{
+    width:100%;
+    margin-top:12px;
+    text-align:center;
+    min-height:28px;
+    color:#bcdfff;
+    font-weight:900;
+    opacity:0;
+    transform:translateY(8px);
+    transition:.35s ease;
+    line-height:1.25;
 }
 
-.toggle.on .switch::after{
-    left:24px;
+.answer-panel.show{
+    opacity:1;
+    transform:translateY(0);
 }
 
 .actions{
@@ -371,7 +367,7 @@ textarea::placeholder{color:#60718c}
     display:grid;
     grid-template-columns:1fr 1fr 1fr;
     gap:10px;
-    margin-top:12px;
+    margin-top:14px;
 }
 
 .btn{
@@ -379,7 +375,6 @@ textarea::placeholder{color:#60718c}
     color:#dceeff;
     background:rgba(255,255,255,.07);
     border:1px solid var(--border);
-    box-shadow:none;
     font-size:13px;
 }
 
@@ -388,81 +383,6 @@ textarea::placeholder{color:#60718c}
     background:linear-gradient(135deg,#6ee7ff,#35b7ff);
 }
 
-.answer-panel{
-    width:100%;
-    margin-top:12px;
-    text-align:center;
-    min-height:28px;
-    color:#bcdfff;
-    font-weight:800;
-    opacity:0;
-    transform:translateY(8px);
-    transition:.35s ease;
-}
-
-.answer-panel.show{
-    opacity:1;
-    transform:translateY(0);
-}
-
-.history-card{
-    display:none;
-    width:100%;
-    margin-top:12px;
-    border:1px solid var(--border);
-    background:rgba(8,12,22,.9);
-    border-radius:22px;
-    padding:14px;
-}
-
-.history-card.show{display:block}
-
-.history-title{
-    display:flex;
-    justify-content:space-between;
-    align-items:center;
-    color:#dff4ff;
-    font-weight:900;
-    margin-bottom:10px;
-}
-
-.history-list{
-    display:flex;
-    flex-direction:column;
-    gap:9px;
-    max-height:290px;
-    overflow:auto;
-    padding-right:3px;
-}
-
-.history-item{
-    border:1px solid rgba(255,255,255,.08);
-    background:rgba(255,255,255,.04);
-    border-radius:16px;
-    padding:10px;
-}
-
-.history-q{
-    color:#e9f7ff;
-    font-size:13px;
-}
-
-.history-a{
-    color:#67d8ff;
-    margin-top:5px;
-    font-weight:800;
-    font-size:13px;
-}
-
-.clear-history{
-    color:#ffbad0;
-    background:none;
-    border:0;
-    font:inherit;
-    font-size:12px;
-}
-
-/* FX layers */
 .sparkles,.confetti{
     position:fixed;
     inset:0;
@@ -490,7 +410,6 @@ textarea::placeholder{color:#60718c}
     animation:confettiFall 1.8s ease-in forwards;
 }
 
-/* Animations */
 @keyframes floaty{
     0%,100%{transform:translateY(0)}
     50%{transform:translateY(-12px)}
@@ -514,6 +433,11 @@ textarea::placeholder{color:#60718c}
     0%{transform:translate(-50%,-45%) scale(.88);opacity:.2}
     70%{transform:translate(-50%,-45%) scale(1.06);opacity:1}
     100%{transform:translate(-50%,-45%) scale(1)}
+}
+
+@keyframes trianglePulse{
+    0%,100%{box-shadow:0 0 34px rgba(53,183,255,.72)}
+    50%{box-shadow:0 0 58px rgba(53,183,255,1)}
 }
 
 @keyframes spark{
@@ -549,10 +473,10 @@ textarea::placeholder{color:#60718c}
         <p class="subtitle">The puck knows... whether you like the answer or not.</p>
     </header>
 
-    <section class="stage" aria-label="Magic ball">
+    <section class="stage">
         <div class="ball-wrap">
             <div class="ball" id="ball">
-                <div class="triangle" id="triangle">
+                <div class="triangle">
                     <div class="triangle-inner" id="answerText">ASK<br>THE<br>PUCK</div>
                 </div>
             </div>
@@ -582,16 +506,6 @@ textarea::placeholder{color:#60718c}
             <button class="btn" id="clearBtn">Clear Question</button>
             <button class="btn home" id="homeBtn">Home</button>
         </div>
-
-        <button class="btn" id="historyBtn" style="width:100%;margin-top:10px;">📜 History</button>
-    </section>
-
-    <section class="history-card" id="historyCard">
-        <div class="history-title">
-            <span>Last 20 Questions</span>
-            <button class="clear-history" id="clearHistoryBtn">Clear</button>
-        </div>
-        <div class="history-list" id="historyList"></div>
     </section>
 </main>
 
@@ -599,10 +513,6 @@ textarea::placeholder{color:#60718c}
 <audio id="legendSound" src="ding.mp3" preload="auto"></audio>
 
 <script>
-/* =========================================================
-   PucKnows 8 Ball Logic
-========================================================= */
-
 const questionEl = document.getElementById("question");
 const askBtn = document.getElementById("askBtn");
 const againBtn = document.getElementById("againBtn");
@@ -614,14 +524,9 @@ const loadingMsg = document.getElementById("loadingMsg");
 const answerPanel = document.getElementById("answerPanel");
 const soundToggle = document.getElementById("soundToggle");
 const vibeToggle = document.getElementById("vibeToggle");
-const historyBtn = document.getElementById("historyBtn");
-const historyCard = document.getElementById("historyCard");
-const historyList = document.getElementById("historyList");
-const clearHistoryBtn = document.getElementById("clearHistoryBtn");
 const sparkles = document.getElementById("sparkles");
 const confetti = document.getElementById("confetti");
 
-const LS_HISTORY = "puckknows_8ball_history";
 const LS_SOUND = "puckknows_sound_on";
 const LS_VIBE = "puckknows_vibration_on";
 
@@ -636,9 +541,7 @@ const thinkingMessages = [
     "One moment...",
     "Questioning your judgement...",
     "Checking with the universe...",
-    "Ignoring common sense...",
     "Polishing the crystal puck...",
-    "Searching for a sensible answer...",
     "The puck is warming up..."
 ];
 
@@ -650,54 +553,33 @@ const normalResponses = [
     "Walk away.","Flip a coin instead.","For Puck's Sake... NO.","For Puck's Sake... YES.",
     "Only after coffee.","Only if your wife agrees.","Proceed with caution.",
     "You already know the answer.","Don't be ridiculous.","Ask after payday.",
-    "Not if crypto is involved.","The puck says behave yourself.","Brave choice. Questionable, but brave.",
-    "That has bad idea written all over it.","Surprisingly, yes.","Surprisingly, no.",
-    "Your future self is already annoyed.","Do it, but don't blame the puck.",
-    "The puck has seen worse ideas. Barely.","Give it 24 hours.",
-    "Wait until tomorrow.","Let someone else decide.","Yes, but keep the receipt.",
-    "No, and you know it.","That is a trap.","Only if it is under budget.",
-    "This feels expensive.","That answer is above the puck's pay grade.",
-    "Ask your bank account first.","The stars say maybe. The puck says no.",
-    "Strong yes energy.","Strong no energy.","Medium chaos detected.",
+    "Not if crypto is involved.","The puck says behave yourself.",
+    "Brave choice. Questionable, but brave.","That has bad idea written all over it.",
+    "Surprisingly, yes.","Surprisingly, no.","Your future self is already annoyed.",
+    "Do it, but don't blame the puck.","Give it 24 hours.","Wait until tomorrow.",
+    "Yes, but keep the receipt.","No, and you know it.","That is a trap.",
+    "Ask your bank account first.","Strong yes energy.","Strong no energy.",
     "Looks like a win.","Looks like a lesson.","Do not poke that bear.",
-    "Send it.","Abort mission.","One does not simply do that.",
-    "Your wife is probably right.","The puck is not impressed.",
-    "That might actually work.","Could go either way.","Not worth the drama.",
+    "Send it.","Abort mission.","Your wife is probably right.",
+    "The puck is not impressed.","Could go either way.","Not worth the drama.",
     "Worth the risk.","Too much hassle.","Check the numbers first.",
-    "Only if you can laugh about it later.","The puck approves.",
-    "The puck disapproves loudly.","Ask again when you're less hungry.",
-    "Ask again when you're less skint.","The answer is hiding behind common sense.",
+    "The puck approves.","The puck disapproves loudly.",
     "Good idea. Bad timing.","Bad idea. Great story.",
-    "You should probably stop asking and start doing.",
-    "The universe shrugged.","It is giving chaos, but yes.",
-    "It is giving disaster, but funny.",
-    "There is a 73% chance of regret.","There is a 91% chance of smugness.",
-    "Nope. Hard nope.","Yes. Weirdly yes.",
-    "Only if there is snacks.","Only if you have a backup plan.",
-    "Trust the puck. Regret is optional.",
-    "Don't make this a whole thing.",
-    "It will cost more than you think.",
-    "This has group chat material written all over it.",
-    "The puck says keep it simple.",
-    "The puck says stop overthinking.",
-    "Probably, but lower your expectations.",
-    "Definitely, but act casual.",
-    "Not today, captain chaos.",
+    "The universe shrugged.","Nope. Hard nope.","Yes. Weirdly yes.",
+    "Trust the puck. Regret is optional.","Don't make this a whole thing.",
+    "It will cost more than you think.","The puck says keep it simple.",
+    "The puck says stop overthinking.","Not today, captain chaos.",
     "Yes, legend.","No, big yin.","Aye, but don't get cocky.",
-    "Naw, leave it alone.","That is a future problem.",
-    "That is a now problem.","Ask after one more cup of tea.",
+    "Naw, leave it alone.","Ask after one more cup of tea.",
     "The puck needs a lie down.","Looks decent.","Looks dodgy.",
-    "You have survived worse decisions.",
-    "This is either genius or nonsense.",
-    "The puck says: make a spreadsheet.",
-    "The puck says: send it to the moon.",
-    "No leverage. No drama.","Take profit first.",
-    "Walk away while you still look clever."
+    "This is either genius or nonsense.","The puck says: make a spreadsheet.",
+    "The puck says: send it to the moon.","No leverage. No drama.",
+    "Take profit first.","Walk away while you still look clever."
 ];
 
 const legendaryResponses = [
-    "🏆 JACKPOT!\nThe puck has spoken. Buy the lottery ticket.",
-    "⚠️ LEGENDARY ANSWER UNLOCKED.\nYou may never be this lucky again.",
+    "🏆 JACKPOT!\nBuy the lottery ticket.",
+    "⚠️ LEGENDARY ANSWER.\nYou may never be this lucky again.",
     "🌌 COSMIC PUCK EVENT.\nThe universe just blinked first."
 ];
 
@@ -739,44 +621,18 @@ function playSound(legendary=false){
 }
 
 function saveHistory(q,a){
-    const history = JSON.parse(localStorage.getItem(LS_HISTORY) || "[]");
-    history.unshift({q,a, t:new Date().toISOString()});
-    localStorage.setItem(LS_HISTORY, JSON.stringify(history.slice(0,20)));
+    const history = JSON.parse(localStorage.getItem("puckknows_8ball_history") || "[]");
+    history.unshift({q,a,t:new Date().toISOString()});
+    localStorage.setItem("puckknows_8ball_history", JSON.stringify(history.slice(0,20)));
 }
 
-function renderHistory(){
-    const history = JSON.parse(localStorage.getItem(LS_HISTORY) || "[]");
-    historyList.innerHTML = "";
-    if(!history.length){
-        historyList.innerHTML = `<div class="history-item"><div class="history-q">No questions yet. The puck is waiting.</div></div>`;
-        return;
-    }
-    history.forEach(item => {
-        const div = document.createElement("div");
-        div.className = "history-item";
-        div.innerHTML = `
-            <div class="history-q">Q: ${escapeHtml(item.q)}</div>
-            <div class="history-a">A: ${escapeHtml(item.a)}</div>
-        `;
-        historyList.appendChild(div);
-    });
+function triangleText(answer){
+    return answer
+        .replace(/^The puck says:\s*/i, "")
+        .replace(/^For Puck's Sake\.\.\.\s*/i, "FPS: ")
+        .replace(/\.$/, "")
+        .toUpperCase();
 }
-
-function escapeHtml(str){
-    return String(str).replace(/[&<>"']/g, m => ({
-        "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#039;"
-    }[m]));
-}
-
-historyBtn.addEventListener("click", () => {
-    historyCard.classList.toggle("show");
-    renderHistory();
-});
-
-clearHistoryBtn.addEventListener("click", () => {
-    localStorage.removeItem(LS_HISTORY);
-    renderHistory();
-});
 
 function makeSparkles(count=24){
     const rect = ball.getBoundingClientRect();
@@ -831,9 +687,9 @@ async function askPuck(){
     ball.classList.add("revealed");
     if(legendary) ball.classList.add("legendary");
 
-    answerText.textContent = answer;
+    answerText.textContent = triangleText(answer);
     loadingMsg.textContent = "";
-    answerPanel.textContent = answer.replace(/\n/g, " ");
+    answerPanel.textContent = "The puck says: " + answer.replace(/\n/g, " ");
     answerPanel.classList.add("show");
 
     makeSparkles(legendary ? 55 : 26);
