@@ -1,0 +1,681 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+<title>PuckNotes</title>
+<link rel="icon" href="logo.png">
+<link rel="apple-touch-icon" href="logo.png">
+
+<style>
+:root{
+    --bg:#05070d;
+    --text:#f5f7fb;
+    --muted:#8b8f98;
+    --line:#2b2b2b;
+    --blue:#1da8ff;
+    --blue2:#006bff;
+    --green:#36f5b8;
+    --red:#ff5b7e;
+}
+
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+
+html,body{
+    margin:0;
+    min-height:100%;
+    font-family:system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Arial,sans-serif;
+    background:radial-gradient(circle at top,#151515 0%,#070707 48%,#020202 100%);
+    color:var(--text);
+}
+
+body::before{
+    content:"";
+    position:fixed;
+    inset:0;
+    pointer-events:none;
+    background:
+        linear-gradient(rgba(255,255,255,.018) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255,255,255,.014) 1px, transparent 1px);
+    background-size:28px 28px;
+    opacity:.45;
+}
+
+.wrap{
+    width:min(520px,100%);
+    margin:0 auto;
+    min-height:100svh;
+    padding:24px 18px max(28px, env(safe-area-inset-bottom));
+}
+
+.top{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    margin-bottom:18px;
+}
+
+.back{
+    color:#e8e8e8;
+    text-decoration:none;
+    border:1px solid var(--line);
+    border-radius:20px;
+    padding:11px 15px;
+    background:rgba(255,255,255,.04);
+    font-weight:800;
+}
+
+.badge{
+    border:1px solid rgba(29,168,255,.25);
+    background:rgba(29,168,255,.08);
+    color:#bfe9ff;
+    border-radius:999px;
+    padding:10px 13px;
+    font-size:13px;
+    font-weight:900;
+}
+
+.logo{
+    display:block;
+    width:82px;
+    height:82px;
+    object-fit:cover;
+    border-radius:50%;
+    margin:2px auto 12px;
+    box-shadow:0 0 38px rgba(29,168,255,.32);
+}
+
+.eyebrow{
+    text-align:center;
+    color:#8e8e8e;
+    font-weight:900;
+    letter-spacing:.35em;
+    font-size:13px;
+}
+
+h1{
+    margin:6px 0 8px;
+    text-align:center;
+    font-size:clamp(38px,9vw,54px);
+    line-height:.98;
+    letter-spacing:-1.5px;
+}
+
+.subhead{
+    margin:0 auto 22px;
+    max-width:390px;
+    text-align:center;
+    color:var(--muted);
+    font-size:16px;
+    line-height:1.35;
+}
+
+.panel{
+    border:1px solid var(--line);
+    background:linear-gradient(180deg,rgba(20,20,20,.96),rgba(8,8,8,.96));
+    border-radius:28px;
+    padding:18px;
+    box-shadow:0 24px 70px rgba(0,0,0,.5);
+}
+
+.input-row{
+    display:grid;
+    grid-template-columns:1fr auto;
+    gap:10px;
+}
+
+input{
+    width:100%;
+    border:1px solid var(--line);
+    background:#050505;
+    color:var(--text);
+    border-radius:18px;
+    padding:16px;
+    font:inherit;
+    outline:none;
+}
+
+input:focus{
+    border-color:rgba(29,168,255,.6);
+    box-shadow:0 0 0 4px rgba(29,168,255,.08);
+}
+
+button{
+    border:0;
+    border-radius:18px;
+    font:inherit;
+    font-weight:900;
+    cursor:pointer;
+    min-height:54px;
+    transition:transform .15s ease, opacity .15s ease;
+}
+
+button:active{transform:scale(.98)}
+
+.add{
+    padding:0 18px;
+    color:#06111d;
+    background:linear-gradient(135deg,#6ee7ff,var(--blue),var(--blue2));
+}
+
+.mic{
+    width:100%;
+    margin-top:12px;
+    color:#06111d;
+    background:linear-gradient(135deg,#5fffea,#1da8ff,#755cff);
+    box-shadow:0 18px 34px rgba(29,168,255,.22);
+}
+
+.mic.listening{
+    animation:micPulse 1s ease-in-out infinite;
+    background:linear-gradient(135deg,#ff6aa7,#8b5cff,#1da8ff);
+}
+
+.status{
+    min-height:22px;
+    margin:12px 2px 0;
+    color:#9ecfff;
+    font-size:14px;
+    text-align:center;
+}
+
+.quick{
+    margin-top:14px;
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:10px;
+}
+
+.chip{
+    min-height:42px;
+    border-radius:999px;
+    font-size:13px;
+    color:#cfd5de;
+    background:rgba(255,255,255,.055);
+    border:1px solid var(--line);
+}
+
+.list-box{
+    margin-top:16px;
+    border:1px solid var(--line);
+    background:rgba(255,255,255,.035);
+    border-radius:22px;
+    padding:12px;
+}
+
+.list-title-row{
+    display:flex;
+    gap:10px;
+    align-items:center;
+    margin-bottom:12px;
+}
+
+.title-input{
+    font-weight:900;
+    font-size:18px;
+    padding:13px 14px;
+}
+
+.count{
+    flex:0 0 auto;
+    color:#aab;
+    font-size:13px;
+    font-weight:900;
+    border:1px solid var(--line);
+    background:#080808;
+    border-radius:999px;
+    padding:10px 12px;
+}
+
+.items{
+    display:flex;
+    flex-direction:column;
+    gap:10px;
+    min-height:72px;
+}
+
+.empty{
+    color:#6f7480;
+    text-align:center;
+    padding:24px 10px;
+    font-weight:700;
+}
+
+.item{
+    display:grid;
+    grid-template-columns:auto 1fr auto;
+    gap:10px;
+    align-items:center;
+    border:1px solid rgba(255,255,255,.08);
+    background:rgba(0,0,0,.32);
+    border-radius:17px;
+    padding:10px;
+    animation:itemIn .22s ease;
+}
+
+.check{
+    width:28px;
+    height:28px;
+    border-radius:50%;
+    border:1px solid rgba(255,255,255,.18);
+    display:grid;
+    place-items:center;
+    color:transparent;
+    font-weight:900;
+}
+
+.item.done .check{
+    color:#06111d;
+    background:var(--green);
+}
+
+.item-text{
+    overflow-wrap:anywhere;
+    font-weight:800;
+}
+
+.item.done .item-text{
+    color:#777;
+    text-decoration:line-through;
+}
+
+.delete{
+    min-height:36px;
+    width:38px;
+    border-radius:14px;
+    color:#ffd6df;
+    background:rgba(255,91,126,.12);
+    border:1px solid rgba(255,91,126,.2);
+}
+
+.actions{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:10px;
+    margin-top:14px;
+}
+
+.action{
+    color:#eaf7ff;
+    background:rgba(255,255,255,.07);
+    border:1px solid var(--line);
+}
+
+.action.primary{
+    color:#06111d;
+    background:linear-gradient(135deg,#6ee7ff,var(--blue),var(--blue2));
+}
+
+.action.danger{
+    color:#ffd6df;
+    background:rgba(255,91,126,.12);
+    border-color:rgba(255,91,126,.2);
+}
+
+.help{
+    margin:16px 4px 0;
+    color:#777d88;
+    font-size:13px;
+    line-height:1.35;
+    text-align:center;
+}
+
+.toast{
+    position:fixed;
+    left:50%;
+    bottom:calc(18px + env(safe-area-inset-bottom));
+    transform:translateX(-50%) translateY(30px);
+    background:#101010;
+    border:1px solid var(--line);
+    color:#eaf7ff;
+    padding:13px 16px;
+    border-radius:999px;
+    opacity:0;
+    pointer-events:none;
+    transition:.25s ease;
+    box-shadow:0 12px 36px rgba(0,0,0,.55);
+    z-index:50;
+    max-width:92vw;
+    text-align:center;
+    font-weight:800;
+}
+
+.toast.show{
+    opacity:1;
+    transform:translateX(-50%) translateY(0);
+}
+
+@keyframes micPulse{
+    0%,100%{box-shadow:0 0 0 0 rgba(29,168,255,.38)}
+    50%{box-shadow:0 0 0 12px rgba(29,168,255,0)}
+}
+
+@keyframes itemIn{
+    from{opacity:0;transform:translateY(8px)}
+    to{opacity:1;transform:translateY(0)}
+}
+
+@media(max-width:380px){
+    .actions,.quick{grid-template-columns:1fr}
+    h1{font-size:38px}
+}
+</style>
+</head>
+
+<body>
+<main class="wrap">
+    <div class="top">
+        <a class="back" href="./index.html">← Home</a>
+        <div class="badge">Voice + Share</div>
+    </div>
+
+    <img class="logo" src="./logo.png" alt="PucKnows logo">
+
+    <div class="eyebrow">PUCKNOTES</div>
+    <h1>Say It.<br>List It.</h1>
+    <p class="subhead">Build lists by voice or typing, then share them straight to WhatsApp, messages, notes or anywhere else.</p>
+
+    <section class="panel">
+        <div class="input-row">
+            <input id="manualInput" placeholder="Add item manually..." autocomplete="off">
+            <button class="add" id="addBtn">Add</button>
+        </div>
+
+        <button class="mic" id="micBtn">🎙 Add by Voice</button>
+        <div class="status" id="status">Voice works where supported. Typing always works.</div>
+
+        <div class="quick">
+            <button class="chip" data-template="shopping">🛒 Shopping</button>
+            <button class="chip" data-template="packing">✈️ Packing</button>
+            <button class="chip" data-template="jobs">🛠 Jobs</button>
+            <button class="chip" data-template="party">🎉 Party</button>
+        </div>
+
+        <div class="list-box">
+            <div class="list-title-row">
+                <input class="title-input" id="listTitle" value="PuckNotes List" aria-label="List title">
+                <div class="count" id="count">0</div>
+            </div>
+
+            <div class="items" id="items">
+                <div class="empty">No items yet. Tell the puck what to remember.</div>
+            </div>
+        </div>
+
+        <div class="actions">
+            <button class="action primary" id="shareBtn">📲 Share</button>
+            <button class="action" id="copyBtn">📋 Copy</button>
+            <button class="action" id="whatsBtn">🟢 WhatsApp</button>
+            <button class="action danger" id="clearBtn">🗑 Clear</button>
+        </div>
+
+        <p class="help">
+            Tip: say “add milk, bread and eggs” or “milk, bread, eggs”. On unsupported browsers, use manual typing.
+        </p>
+    </section>
+</main>
+
+<div class="toast" id="toast"></div>
+
+<script>
+const manualInput = document.getElementById("manualInput");
+const addBtn = document.getElementById("addBtn");
+const micBtn = document.getElementById("micBtn");
+const statusEl = document.getElementById("status");
+const itemsEl = document.getElementById("items");
+const countEl = document.getElementById("count");
+const listTitle = document.getElementById("listTitle");
+const shareBtn = document.getElementById("shareBtn");
+const copyBtn = document.getElementById("copyBtn");
+const whatsBtn = document.getElementById("whatsBtn");
+const clearBtn = document.getElementById("clearBtn");
+const toast = document.getElementById("toast");
+
+const LS_ITEMS = "pucknotes_items_v1";
+const LS_TITLE = "pucknotes_title_v1";
+
+let items = JSON.parse(localStorage.getItem(LS_ITEMS) || "[]");
+let recognition = null;
+let listening = false;
+
+const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+
+if(SpeechRecognition){
+    recognition = new SpeechRecognition();
+    recognition.lang = "en-AU";
+    recognition.continuous = false;
+    recognition.interimResults = false;
+
+    recognition.onstart = () => {
+        listening = true;
+        micBtn.classList.add("listening");
+        micBtn.textContent = "🎙 Listening...";
+        statusEl.textContent = "Speak now. Try: add milk, bread and eggs.";
+        vibrate(20);
+    };
+
+    recognition.onresult = (event) => {
+        const text = event.results[0][0].transcript || "";
+        const parsed = parseSpeechItems(text);
+        if(parsed.length){
+            parsed.forEach(addItem);
+            statusEl.textContent = `Added: ${parsed.join(", ")}`;
+            showToast(`Added ${parsed.length} item${parsed.length === 1 ? "" : "s"}`);
+        } else {
+            statusEl.textContent = "I heard you, but couldn't turn it into list items.";
+        }
+    };
+
+    recognition.onerror = () => {
+        statusEl.textContent = "Voice had a moment. Type it instead or try again.";
+        stopListeningUi();
+    };
+
+    recognition.onend = stopListeningUi;
+} else {
+    micBtn.disabled = true;
+    micBtn.textContent = "🎙 Voice unavailable";
+    statusEl.textContent = "Voice is not available on this browser. Manual list making still works.";
+}
+
+function stopListeningUi(){
+    listening = false;
+    micBtn.classList.remove("listening");
+    micBtn.textContent = "🎙 Add by Voice";
+}
+
+function vibrate(pattern){
+    if(navigator.vibrate) navigator.vibrate(pattern);
+}
+
+function save(){
+    localStorage.setItem(LS_ITEMS, JSON.stringify(items));
+    localStorage.setItem(LS_TITLE, listTitle.value.trim() || "PuckNotes List");
+}
+
+function render(){
+    countEl.textContent = items.length;
+    itemsEl.innerHTML = "";
+
+    if(!items.length){
+        itemsEl.innerHTML = `<div class="empty">No items yet. Tell the puck what to remember.</div>`;
+        return;
+    }
+
+    items.forEach((item, index) => {
+        const row = document.createElement("div");
+        row.className = "item" + (item.done ? " done" : "");
+        row.innerHTML = `
+            <div class="check">✓</div>
+            <div class="item-text">${escapeHtml(item.text)}</div>
+            <button class="delete" aria-label="Delete item">×</button>
+        `;
+
+        row.querySelector(".check").addEventListener("click", () => {
+            items[index].done = !items[index].done;
+            save();
+            render();
+        });
+
+        row.querySelector(".item-text").addEventListener("click", () => {
+            items[index].done = !items[index].done;
+            save();
+            render();
+        });
+
+        row.querySelector(".delete").addEventListener("click", () => {
+            items.splice(index,1);
+            save();
+            render();
+            vibrate(15);
+        });
+
+        itemsEl.appendChild(row);
+    });
+}
+
+function escapeHtml(str){
+    return String(str).replace(/[&<>"']/g, m => ({
+        "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#039;"
+    }[m]));
+}
+
+function cleanItem(text){
+    return String(text)
+        .replace(/^add\s+/i,"")
+        .replace(/^put\s+/i,"")
+        .replace(/^remember\s+/i,"")
+        .trim()
+        .replace(/[.]+$/,"");
+}
+
+function parseSpeechItems(text){
+    let t = cleanItem(text);
+    t = t.replace(/\s+and\s+/gi, ",");
+    return t
+        .split(/,|;|\n/)
+        .map(x => cleanItem(x))
+        .filter(Boolean)
+        .map(x => x.charAt(0).toUpperCase() + x.slice(1));
+}
+
+function addItem(text){
+    const cleaned = cleanItem(text);
+    if(!cleaned) return;
+    items.push({ text: cleaned.charAt(0).toUpperCase() + cleaned.slice(1), done:false });
+    save();
+    render();
+}
+
+function listText(){
+    const title = listTitle.value.trim() || "PuckNotes List";
+    const body = items.length
+        ? items.map((item) => `${item.done ? "✓" : "•"} ${item.text}`).join("\n")
+        : "No items yet.";
+    return `${title}\n\n${body}\n\nMade with PucKnows`;
+}
+
+async function copyList(){
+    const text = listText();
+    try{
+        await navigator.clipboard.writeText(text);
+        showToast("Copied to clipboard");
+    }catch(e){
+        const ta = document.createElement("textarea");
+        ta.value = text;
+        document.body.appendChild(ta);
+        ta.select();
+        document.execCommand("copy");
+        document.body.removeChild(ta);
+        showToast("Copied");
+    }
+}
+
+async function shareList(){
+    const text = listText();
+    if(navigator.share){
+        try{
+            await navigator.share({
+                title: listTitle.value.trim() || "PuckNotes List",
+                text
+            });
+            return;
+        }catch(e){}
+    }
+    await copyList();
+    showToast("Share unavailable — copied instead");
+}
+
+function openWhatsApp(){
+    const text = encodeURIComponent(listText());
+    window.location.href = `https://wa.me/?text=${text}`;
+}
+
+function showToast(msg){
+    toast.textContent = msg;
+    toast.classList.add("show");
+    clearTimeout(showToast.timer);
+    showToast.timer = setTimeout(() => toast.classList.remove("show"), 1900);
+}
+
+addBtn.addEventListener("click", () => {
+    addItem(manualInput.value);
+    manualInput.value = "";
+    manualInput.focus();
+    vibrate(15);
+});
+
+manualInput.addEventListener("keydown", e => {
+    if(e.key === "Enter"){
+        e.preventDefault();
+        addBtn.click();
+    }
+});
+
+micBtn.addEventListener("click", () => {
+    if(!recognition) return;
+    if(listening){
+        recognition.stop();
+    }else{
+        try{ recognition.start(); }
+        catch(e){ statusEl.textContent = "Voice is already starting. Try again in a second."; }
+    }
+});
+
+shareBtn.addEventListener("click", shareList);
+copyBtn.addEventListener("click", copyList);
+whatsBtn.addEventListener("click", openWhatsApp);
+
+clearBtn.addEventListener("click", () => {
+    if(!items.length) return;
+    if(confirm("Clear this list?")){
+        items = [];
+        save();
+        render();
+        showToast("List cleared");
+    }
+});
+
+listTitle.addEventListener("input", save);
+
+document.querySelectorAll("[data-template]").forEach(btn => {
+    btn.addEventListener("click", () => {
+        const type = btn.dataset.template;
+        const presets = {
+            shopping:["Milk","Bread","Eggs","Chicken","Fruit"],
+            packing:["Passport","Charger","Toothbrush","Headphones","Wallet"],
+            jobs:["Call back","Send email","Pick up parts","Check quote","Book appointment"],
+            party:["Drinks","Ice","Snacks","Cups","Music"]
+        };
+        presets[type].forEach(addItem);
+        showToast("Template added");
+    });
+});
+
+const savedTitle = localStorage.getItem(LS_TITLE);
+if(savedTitle) listTitle.value = savedTitle;
+
+render();
+</script>
+</body>
+</html>
