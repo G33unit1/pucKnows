@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>My Contact Card</title>
+<style>
+body{font-family:Arial,sans-serif;background:#0b1020;color:#fff;max-width:700px;margin:auto;padding:20px}
+input{width:100%;padding:10px;margin:6px 0;border-radius:8px;border:none}
+button{padding:12px 18px;border:none;border-radius:8px;margin:6px;cursor:pointer}
+</style></head><body>
+<h2>My Contact Card</h2>
+<p>Your details are stored locally on this device.</p>
+<input id="name" placeholder="Name">
+<input id="phone" placeholder="Phone">
+<input id="email" placeholder="Email">
+<input id="website" placeholder="Website">
+<input id="instagram" placeholder="Instagram">
+<input id="facebook" placeholder="Facebook">
+<input id="tiktok" placeholder="TikTok">
+<button onclick="save()">Save</button>
+<button onclick="shareCard()">Share My Card</button>
+<script>
+const ids=["name","phone","email","website","instagram","facebook","tiktok"];
+ids.forEach(i=>{const v=localStorage.getItem("cc_"+i);if(v)document.getElementById(i).value=v;});
+function save(){
+ ids.forEach(i=>localStorage.setItem("cc_"+i,document.getElementById(i).value));
+ alert("Saved locally.");
+}
+async function shareCard(){
+ const text=ids.map(i=>document.getElementById(i).value?i.toUpperCase()+": "+document.getElementById(i).value:"").filter(Boolean).join("\n");
+ if(navigator.share){
+   try{await navigator.share({title:"My Contact Card",text});}catch(e){}
+ }else{
+   navigator.clipboard.writeText(text);
+   alert("Sharing not supported here. Card copied to clipboard.");
+ }
+}
+</script></body></html>
