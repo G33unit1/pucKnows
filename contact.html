@@ -251,34 +251,74 @@ function roundRect(ctx,x,y,w,h,r){
 $("saveBtn").onclick=()=>saveCard();$("previewBtn").onclick=()=>{buildPreview();$("previewDialog").showModal()};$("closePreview").onclick=()=>$("previewDialog").close();$("previewDialog").onclick=e=>{if(e.target===$("previewDialog"))$("previewDialog").close()};async function sharePucCard(){
   saveCard(true);
   const text=shareText();
-  if(!text){showStatus("Add some details first");return}
+
+  if(!text){
+    showStatus("Add some details first");
+    return;
+  }
+
+  const safeName=($("name").value.trim()||"PucCard").replace(/[^a-z0-9]+/gi,"-");
+  const title=($("name").value.trim()||"My")+" PucCard";
+  const message="Here is my PucCard:
+
+"+text;
+
   try{
-    showStatus("Creating your PucCard…");
-    const imageBlob=await createShareCardImage();
-    const safeName=($("name").value.trim()||"PucCard").replace(/[^a-z0-9]+/gi,"-");
-    const imageFile=new File([imageBlob],safeName+"-PucCard.png",{type:"image/png"});
+    showStatus("Preparing your PucCard…");
+
     const vcfBlob=createVCFBlob();
     const vcfFile=new File([vcfBlob],safeName+".vcf",{type:"text/vcard"});
-    const title=($("name").value.trim()||"My")+" PucCard";
-    const message="Here is my PucCard. Open the attached contact file to save my details.\n\n"+text;
 
-    if(navigator.share&&navigator.canShare&&navigator.canShare({files:[imageFile,vcfFile]})){
-      await navigator.share({title,text:message,files:[imageFile,vcfFile]});
-    }else if(navigator.share&&navigator.canShare&&navigator.canShare({files:[imageFile]})){
-      await navigator.share({title,text:message,files:[imageFile]});
-    }else if(navigator.share){
-      await navigator.share({title,text:message});
-    }else{
-      const a=document.createElement("a");
-      a.href=URL.createObjectURL(imageBlob);
-      a.download=safeName+"-PucCard.png";
-      a.click();
-      setTimeout(()=>URL.revokeObjectURL(a.href),1000);
-      await navigator.clipboard.writeText(text).catch(()=>{});
-      showStatus("Card image saved and details copied ✓");
+    if(navigator.share && navigator.canShare && navigator.canShare({files:[vcfFile]})){
+      await navigator.share({
+        title,
+        text:"Open the attached contact file to save my details.",
+        files:[vcfFile]
+      });
+      showStatus("Contact shared ✓");
+      return;
     }
+
+    const imageBlob=await createShareCardImage();
+    const imageFile=new File([imageBlob],safeName+"-PucCard.png",{type:"image/png"});
+
+    if(navigator.share && navigator.canShare && navigator.canShare({files:[imageFile]})){
+      await navigator.share({
+        title,
+        text:message,
+        files:[imageFile]
+      });
+      showStatus("PucCard shared ✓");
+      return;
+    }
+
+    if(navigator.share){
+      await navigator.share({title,text:message});
+      showStatus("Details shared ✓");
+      return;
+    }
+
+    try{
+      await navigator.clipboard.writeText(text);
+    }catch{}
+
+    const a=document.createElement("a");
+    a.href=URL.createObjectURL(vcfBlob);
+    a.download=safeName+".vcf";
+    document.body.appendChild(a);
+    a.click();
+    a.remove();
+    setTimeout(()=>URL.revokeObjectURL(a.href),1000);
+
+    showStatus("Contact downloaded and details copied ✓");
+
   }catch(e){
-    if(e.name!=="AbortError")showStatus("Could not share the PucCard");
+    if(e && e.name==="AbortError"){
+      showStatus("Share cancelled");
+    }else{
+      console.error("PucCard share failed:",e);
+      showStatus("Sharing is not supported on this device");
+    }
   }
 }
 $("shareBtn").onclick=sharePucCard;$("copyBtn").onclick=async()=>{const text=shareText();if(!text){showStatus("Add some details first");return}try{await navigator.clipboard.writeText(text);showStatus("Details copied ✓")}catch{showStatus("Copy is not supported here")}};$("previewSaveContact").onclick=downloadVCF;$("previewShareCard").onclick=sharePucCard;$("vcfBtn").onclick=downloadVCF;$("clearBtn").onclick=()=>{if(!confirm("Clear all saved contact-card details from this device?"))return;Object.keys(localStorage).filter(k=>k.startsWith(prefix)).forEach(k=>localStorage.removeItem(k));fields.forEach(id=>$(id).value="");setPhoto("");$("theme").value="glass";applyStyle("#5fd7ff","95,215,255","glass");updateHero();showStatus("Card cleared")};
