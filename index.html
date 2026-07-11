@@ -22,6 +22,120 @@
       text-align:center;
     }
 
+    .notify-bar{
+      display:flex;
+      justify-content:center;
+      margin-bottom:16px;
+    }
+
+    .notify-button{
+      appearance:none;
+      border:1px solid rgba(95,215,255,.45);
+      background:linear-gradient(180deg,rgba(95,215,255,.16),rgba(95,215,255,.06));
+      color:#f5f5f5;
+      border-radius:999px;
+      padding:11px 17px;
+      font:inherit;
+      font-size:14px;
+      font-weight:900;
+      letter-spacing:.01em;
+      cursor:pointer;
+      box-shadow:0 0 24px rgba(95,215,255,.16);
+      transition:.18s ease;
+    }
+
+    .notify-button:active{
+      transform:scale(.97);
+      box-shadow:0 0 34px rgba(95,215,255,.32);
+    }
+
+    .modal-backdrop{
+      position:fixed;
+      inset:0;
+      display:none;
+      place-items:center;
+      padding:20px;
+      background:rgba(0,0,0,.78);
+      backdrop-filter:blur(8px);
+      z-index:1000;
+    }
+
+    .modal-backdrop.show{
+      display:grid;
+    }
+
+    .modal{
+      width:min(420px,100%);
+      background:linear-gradient(180deg,#171717,#0b0b0b);
+      border:1px solid #2c2c2c;
+      border-radius:26px;
+      padding:24px;
+      text-align:left;
+      box-shadow:0 24px 80px rgba(0,0,0,.65),0 0 34px rgba(95,215,255,.12);
+    }
+
+    .modal h2{
+      margin:0 0 8px;
+      font-size:26px;
+      letter-spacing:-.03em;
+    }
+
+    .modal p{
+      margin:0 0 18px;
+      color:rgba(245,245,245,.68);
+      line-height:1.5;
+    }
+
+    .email-input{
+      box-sizing:border-box;
+      width:100%;
+      border:1px solid #303030;
+      background:#090909;
+      color:#fff;
+      border-radius:16px;
+      padding:15px 16px;
+      font:inherit;
+      outline:none;
+      margin-bottom:12px;
+    }
+
+    .email-input:focus{
+      border-color:#5fd7ff;
+      box-shadow:0 0 0 3px rgba(95,215,255,.12);
+    }
+
+    .modal-actions{
+      display:grid;
+      grid-template-columns:1fr auto;
+      gap:10px;
+    }
+
+    .join-button,.cancel-button{
+      border:0;
+      border-radius:16px;
+      padding:14px 16px;
+      font:inherit;
+      font-weight:900;
+      cursor:pointer;
+    }
+
+    .join-button{
+      background:#5fd7ff;
+      color:#061015;
+    }
+
+    .cancel-button{
+      background:#202020;
+      color:#f5f5f5;
+    }
+
+    .privacy-note{
+      margin-top:12px;
+      font-size:12px;
+      opacity:.45;
+      text-align:center;
+    }
+
     .logo{
       width:135px;
       height:135px;
@@ -138,6 +252,10 @@
 
 <body>
   <div class="wrap">
+    <div class="notify-bar">
+      <button class="notify-button" id="notifyButton" type="button">🚀 Notify me when the app launches</button>
+    </div>
+
     <img class="logo" src="./logo.png" alt="PucKnows logo">
 
     <div class="eyebrow">PUCKNOWS</div>
@@ -215,6 +333,19 @@
     </div>
   </div>
 
+  <div class="modal-backdrop" id="waitlistModal" aria-hidden="true">
+    <div class="modal" role="dialog" aria-modal="true" aria-labelledby="waitlistTitle">
+      <h2 id="waitlistTitle">Join the PucKnows waitlist</h2>
+      <p>Enter your email and we’ll prepare a message to PucKnows@gmail.com so you can be notified when the official app launches.</p>
+      <input class="email-input" id="waitlistEmail" type="email" inputmode="email" autocomplete="email" placeholder="Your email address" aria-label="Your email address">
+      <div class="modal-actions">
+        <button class="join-button" id="joinWaitlist" type="button">Join waitlist</button>
+        <button class="cancel-button" id="cancelWaitlist" type="button">Cancel</button>
+      </div>
+      <div class="privacy-note">No spam. Just an app launch notification.</div>
+    </div>
+  </div>
+
   <audio id="startupSound" preload="auto">
     <source src="./startup.mp3" type="audio/mpeg">
   </audio>
@@ -223,6 +354,54 @@
     window.addEventListener("load", () => {
       const logo = document.querySelector(".logo");
       const sound = document.getElementById("startupSound");
+      const notifyButton = document.getElementById("notifyButton");
+      const waitlistModal = document.getElementById("waitlistModal");
+      const waitlistEmail = document.getElementById("waitlistEmail");
+      const joinWaitlist = document.getElementById("joinWaitlist");
+      const cancelWaitlist = document.getElementById("cancelWaitlist");
+
+      const openWaitlist = () => {
+        waitlistModal.classList.add("show");
+        waitlistModal.setAttribute("aria-hidden", "false");
+        setTimeout(() => waitlistEmail.focus(), 50);
+      };
+
+      const closeWaitlist = () => {
+        waitlistModal.classList.remove("show");
+        waitlistModal.setAttribute("aria-hidden", "true");
+      };
+
+      notifyButton.addEventListener("click", openWaitlist);
+      cancelWaitlist.addEventListener("click", closeWaitlist);
+
+      waitlistModal.addEventListener("click", (event) => {
+        if (event.target === waitlistModal) closeWaitlist();
+      });
+
+      document.addEventListener("keydown", (event) => {
+        if (event.key === "Escape") closeWaitlist();
+      });
+
+      joinWaitlist.addEventListener("click", () => {
+        const email = waitlistEmail.value.trim();
+
+        if (!waitlistEmail.checkValidity() || !email) {
+          waitlistEmail.reportValidity();
+          return;
+        }
+
+        const subject = encodeURIComponent("PucKnows App Waitlist");
+        const body = encodeURIComponent(
+          `Hi,\n\nI'd like to be notified when the official PucKnows app is released.\n\nMy email address is: ${email}\n\nThanks!`
+        );
+
+        window.location.href = `mailto:PucKnows@gmail.com?subject=${subject}&body=${body}`;
+        closeWaitlist();
+      });
+
+      waitlistEmail.addEventListener("keydown", (event) => {
+        if (event.key === "Enter") joinWaitlist.click();
+      });
 
       if (logo) {
         logo.classList.add("intro");
